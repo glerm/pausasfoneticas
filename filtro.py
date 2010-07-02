@@ -149,7 +149,7 @@ def listadeclasses():
 	return ['substantivo', 'adjetivo', 'verbo', u'conjunção', u'preposição', 'pronome']
 
 
-
+#buscas
 
 def daclasse(classebuscada,classes,palavras): #recebe a classe e busca quais palavras sao da tal classe
 	z=zip(classes,palavras) #forma uma lista de tuplas tipo [('substantivo','palavra')...]
