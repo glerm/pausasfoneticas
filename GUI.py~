@@ -20,7 +20,34 @@ def donothing():
 	tkMessageBox.showinfo("Pronto!", "Os relatorios ja foram gerados e estao no diretorio " )
 
 
+menubar = Menu(root)
+filemenu = Menu(menubar, tearoff=0)
+filemenu.add_command(label="Faixa Etaria", command=donothing)
+filemenu.add_command(label="Tipo de História", command=donothing)
+filemenu.add_command(label="Classe de Palavra", command=donothing)
 
+filemenu.add_separator()
+
+filemenu.add_command(label="Exit", command=root.quit)
+menubar.add_cascade(label="Medias", menu=filemenu)
+editmenu = Menu(menubar, tearoff=0)
+editmenu.add_command(label="Undo", command=donothing)
+
+editmenu.add_separator()
+
+editmenu.add_command(label="Cut", command=donothing)
+editmenu.add_command(label="Copy", command=donothing)
+editmenu.add_command(label="Paste", command=donothing)
+editmenu.add_command(label="Delete", command=donothing)
+editmenu.add_command(label="Select All", command=donothing)
+
+menubar.add_cascade(label="Edit", menu=editmenu)
+helpmenu = Menu(menubar, tearoff=0)
+helpmenu.add_command(label="Help Index", command=donothing)
+helpmenu.add_command(label="About...", command=donothing)
+menubar.add_cascade(label="Help", menu=helpmenu)
+
+root.config(menu=menubar)
 
 
 
@@ -116,32 +143,16 @@ btn2a.grid(row=1,column=1)
 btn2b = Tkinter.Button(Bframe2,text="Limpa", relief="groove",activebackground="#ED3921", bg="darkblue",fg="white",bd=4, command=desativarTUDO)
 btn2b.grid(row=1,column=2)
 
+INFO=Tkinter.Frame(root)
+INFO.grid(row=3,column=1)
+c=Tkinter.Label(INFO, text="Este software vmdm fiowf ")
+c.pack()
 
+Bframe3=Tkinter.Frame(root)
+Bframe3.grid(row=4,column=1)
 
-
-################### MENU
-
-menubar = Menu(root)
-filemenu = Menu(menubar, tearoff=0)
-filemenu.add_command(label="Faixa Etaria", command=donothing)
-filemenu.add_command(label="Tipo de História", command=donothing)
-filemenu.add_command(label="Classe de Palavra", command=donothing)
-
-filemenu.add_separator()
-
-filemenu.add_command(label="Exit", command=root.quit)
-menubar.add_cascade(label="Medias", menu=filemenu)
-
-
-
-helpmenu = Menu(menubar, tearoff=0)
-helpmenu.add_command(label="Gerar", command=ativado)
-helpmenu.add_command(label="About...", command=ativado)
-menubar.add_cascade(label="Gerar", menu=helpmenu)
-
-root.config(menu=menubar)
-
-################################
+BTN = Tkinter.Button(Bframe3,text="Gerar relatórios", relief="groove",activebackground="#ED2139", bg="darkred",fg="white",bd=4, command=ativado)
+BTN.grid(row=1,column=1)
 
 
 
