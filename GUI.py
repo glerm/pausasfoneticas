@@ -16,18 +16,24 @@ root.title("Tipos de Relatório")
 root
 var = IntVar()
 
+######## funcoes gerais
+
 def donothing():
 	tkMessageBox.showinfo("Pronto!", "Os relatorios ja foram gerados e estao no diretorio " )
-
-
-
-
 
 
 def callback():
 	tkMessageBox.showinfo("Pronto!", "Os relatorios ja foram gerados e estao no diretorio " )
 
 
+amostraspesquisa=["Marcelo","Marbas","Ronas","Guana","Kotange","Kanaima"]
+
+##### enche a lista
+def enche_listbox(lista,lbox):	
+	for i in lista:
+		lbox.insert(len(lista), i)
+
+######### amostras pesquisa ### linha 1 coluna 1
 
 F1=Tkinter.Frame(root)
 F1.grid(row=1,column=1)
@@ -36,43 +42,31 @@ F1.grid(row=1,column=1)
 a=Tkinter.Label(F1, text="Amostras Pesquisa")
 a.pack()
 
-
 scrollbar1 = Scrollbar(F1)
 scrollbar1.pack( side = RIGHT, fill=Y )
 
-
-
-
-
-
-
 Lb1 = Listbox(F1,selectmode=MULTIPLE,yscrollcommand = scrollbar1.set, exportselection=0)
-Lb1.insert(1, "Aleixo")
-Lb1.insert(2, "Carlos")
-Lb1.insert(3, "Carla")
-Lb1.insert(4, "Alexandre")
-Lb1.insert(5, "Jean")
-Lb1.insert(6, "Dilma")
+
+
+enche_listbox(amostraspesquisa, Lb1)
+
+
 
 Lb1.config(bg="#BFBEA2", font=("Helvetica",12) )
 
-#
+
 def ativado():
-# get selected line index
-#
 	itens= Lb1.curselection()
 	for i in itens:
 		lista = Lb1.get(i)	
 		print lista
+
 
 def ativarTUDO():
 	Lb1.selection_set(0,6)
 
 def desativarTUDO():
 	Lb1.selection_clear(0,6)
-
-
-
 
 
 Lb1.pack(side = RIGHT, fill = BOTH)
@@ -88,13 +82,14 @@ scrollbar2= Scrollbar(F2)
 scrollbar2.pack( side = RIGHT, fill=Y )
 
 
+###### amostras controle
+
+
+amostrascontrole=["Simone","Tininha","Thiago","Ricardo","Augusto","Manoel"]
+
 Lb2 = Listbox(F2,selectmode=MULTIPLE,yscrollcommand = scrollbar2.set, exportselection=0)
-Lb2.insert(1, "Dunga")
-Lb2.insert(2, "Camila")
-Lb2.insert(3, "Daniel")
-Lb2.insert(4, "Monica")
-Lb2.insert(5, "João")
-Lb2.insert(6, "Marina")
+for i in amostrascontrole:
+	Lb2.insert(len(amostrascontrole), i)
 
 Lb2.pack(side = RIGHT, fill = BOTH)
 Lb2.config(bg="#B2A9FF", font=("Helvetica",12))
