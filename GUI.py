@@ -50,6 +50,7 @@ cor5="#00B3A0"
 class Celula:
 	def __init__(self,root,coluna,listadeitens,tipo,cor):
 
+
 		F1=Tkinter.Frame(root)
 		F1.grid(row=1,column=coluna)
 
@@ -61,10 +62,32 @@ class Celula:
 		scrollbar1.pack( side = RIGHT, fill=Y )
 
 		lbox = Listbox(F1,selectmode=MULTIPLE,yscrollcommand = scrollbar1.set, exportselection=0)
+		#exportselection=0 para multiplas instancias funcionarem independentes
 
 		for i in listadeitens:
 			lbox.insert(len(listadeitens), i)
 		tamanhodalista = len(listadeitens)
+
+		#### funções de leitura interna da celula
+
+		def ativarTUDO():
+			lbox.selection_set(0,tamanhodalista)
+			#print [lbox.get(i) for i in lbox.curselection()]
+
+		def desativarTUDO():
+			lbox.selection_clear(0,tamanhodalista)
+
+		def ler():
+			print [lbox.get(i) for i in lbox.curselection()]
+		#######################################################
+
+
+
+
+		lbox.bind("<ButtonRelease-1>", donothing)
+
+
+
 
 		lbox.config(bg=cor, font=("Helvetica",12) )
 		lbox.pack(side = RIGHT, fill = BOTH)
@@ -72,15 +95,10 @@ class Celula:
 
 
 
-		def ativarTUDO():
-			lbox.selection_set(0,tamanhodalista)
 
-		def desativarTUDO():
-			lbox.selection_clear(0,tamanhodalista)
 
-		
-		#print [lbox.get(i) for i in lbox.curselection()]
-			
+
+
 
 
 		Bframe1=Tkinter.Frame(root)
@@ -90,7 +108,7 @@ class Celula:
 		btn1b = Tkinter.Button(Bframe1,text="Limpa", relief="groove",activebackground="#ED3921", 	bg="brown",fg="white",bd=4, command=desativarTUDO)
 		btn1b.grid(row=1,column=2)
 
-	#self.itens= [lbox.get(i) for i in lbox.curselection()]
+		
 
 
 
@@ -99,12 +117,15 @@ class Celula:
 
 
 
-Celula(root,1,pesquisa,"Pesquisa",cor1)
-Celula (root,2,controle,"Controle",cor2)
-Celula (root,3,idade,"Faixa etária",cor3)
-Celula (root,4,historia,"Tipo de História",cor4)
-Celula (root,5,gramatica,"Classe de Palavra",cor5)
+a=Celula(root,1,pesquisa,"Pesquisa",cor1)
+b=Celula (root,2,controle,"Controle",cor2)
+c=Celula (root,3,idade,"Faixa etária",cor3)
+d=Celula (root,4,historia,"Tipo de História",cor4)
+e=Celula (root,5,gramatica,"Classe de Palavra",cor5)
 
+
+def leiaA():
+	a.leia=True
 
 
 
@@ -121,7 +142,7 @@ filemenu.add_separator()
 filemenu.add_command(label="Exit", command=root.quit)
 menubar.add_cascade(label="Medias", menu=filemenu)
 helpmenu = Menu(menubar, tearoff=0)
-helpmenu.add_command(label="Gerar", command=donothing)
+helpmenu.add_command(label="Gerar", command=leiaA)
 helpmenu.add_command(label="About...", command=donothing)
 menubar.add_cascade(label="Gerar", menu=helpmenu)
 
