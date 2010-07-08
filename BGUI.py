@@ -87,7 +87,7 @@ class Celula:
 		btn1b = Tkinter.Button(Bframe1,text="Limpa", relief="groove",activebackground="#ED3921", 	bg="brown",fg="white",bd=4, command=desativarTUDO)
 		btn1b.grid(row=1,column=2)
 
-	self.itens= [lbox.get(i) for i in lbox.curselection()]
+	#self.itens= [lbox.get(i) for i in lbox.curselection()]
 
 
 

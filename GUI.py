@@ -22,8 +22,11 @@ def donothing():
 
 ##########################################################
 
-pesquisa=["Marcelo","Marbas","Ronas","Guana","Kotange","Kanaima"]
+pesquisa=["Marcelo","Jarbas","Jonas","Luana","Solange","Janaina"]
 controle=["Simone","Tininha","Thiago","Ricardo","Augusto","Manoel"]
+idade=["5 anos","7 anos","8 anos","10 anos"] 
+historia=["Mecânica 1","Mecânica 2","Comportamental 1","Comportamental 2","Intencional"]
+gramatica=["substantivo","verbo","adjetivo","advérbio","conjunção"]
 
 cor1="#BFACC5"
 cor2="#BFBEA2"
@@ -76,7 +79,7 @@ class Celula:
 			lbox.selection_clear(0,tamanhodalista)
 
 		
-
+		#print [lbox.get(i) for i in lbox.curselection()]
 			
 
 
@@ -87,7 +90,7 @@ class Celula:
 		btn1b = Tkinter.Button(Bframe1,text="Limpa", relief="groove",activebackground="#ED3921", 	bg="brown",fg="white",bd=4, command=desativarTUDO)
 		btn1b.grid(row=1,column=2)
 
-	self.itens= [lbox.get(i) for i in lbox.curselection()]
+	#self.itens= [lbox.get(i) for i in lbox.curselection()]
 
 
 
@@ -96,11 +99,11 @@ class Celula:
 
 
 
-a=Celula(root,1,pesquisa,"Pesquisa",cor1)
-b=Celula (root,2,controle,"Controle",cor2)
-c=Celula (root,3,controle,"Faixa etária",cor3)
-d=Celula (root,4,controle,"Tipo de História",cor4)
-e=Celula (root,5,controle,"Classe de Palavra",cor5)
+Celula(root,1,pesquisa,"Pesquisa",cor1)
+Celula (root,2,controle,"Controle",cor2)
+Celula (root,3,idade,"Faixa etária",cor3)
+Celula (root,4,historia,"Tipo de História",cor4)
+Celula (root,5,gramatica,"Classe de Palavra",cor5)
 
 
 
