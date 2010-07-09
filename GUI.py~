@@ -75,29 +75,28 @@ class Celula:
 		#### funções de leitura interna da celula
 		tamanhodalista = len(listadeitens)
 
-	self.CELULA={}
+		self.CELULA={}
 
-	def ativarTUDO():
-		lbox.selection_set(0,tamanhodalista)
-		CELitens=[lbox.get(i) for i in lbox.curselection()]
-		self.CELULA={tipo:CELitens}
-		print self.CELULA
+		def ativarTUDO():
+			lbox.selection_set(0,tamanhodalista)
+			CELitens=[lbox.get(i) for i in lbox.curselection()]
+			self.CELULA={tipo:CELitens}
+			print self.CELULA
 			
 
-	def desativarTUDO():
-		lbox.selection_clear(0,tamanhodalista)
-		CELitens=[lbox.get(i) for i in lbox.curselection()]
-		self.CELULA={tipo:CELitens}
-		print self.CELULA
+		def desativarTUDO():
+			lbox.selection_clear(0,tamanhodalista)
+			CELitens=[lbox.get(i) for i in lbox.curselection()]
+			self.CELULA={tipo:CELitens}
+			print self.CELULA
 
-	def ler(event):
-		#print [lbox.get(i) for i in lbox.curselection()]
-		CELitens=[lbox.get(i) for i in lbox.curselection()]
-		self.CELULA={tipo:CELitens}
-		print self.CELULA
+		def ler(event):
+			#print [lbox.get(i) for i in lbox.curselection()]
+			CELitens=[lbox.get(i) for i in lbox.curselection()]
+			self.CELULA={tipo:CELitens}
+			print self.CELULA
 
 		#######################################################
-
 
 
 
@@ -118,7 +117,9 @@ class Celula:
 		btn1b = Tkinter.Button(Bframe1,text="Limpa", relief="groove",activebackground="#ED3921", 	bg=cor,fg="#050505",bd=4, command=desativarTUDO)
 		btn1b.grid(row=1,column=2)
 
-		
+	def CELULAtual(self):
+		return self.CELULA
+	
 
 
 
@@ -135,7 +136,9 @@ e=Celula (root,5,gramatica,cor5)
 
 
 def leiatudo():
-	pass
+	#pass
+	atual=[a.CELULAtual(),b.CELULAtual(),c.CELULAtual(),d.CELULAtual(),e.CELULAtual()]
+	print atual
 
 
 

@@ -100,7 +100,6 @@ class Celula:
 
 
 
-
 		lbox.bind("<ButtonRelease-1>", ler ) #le o botao do mouse quando solta
 
 		lbox.config(bg=cor, font=("Helvetica",12) ) #configs da lista
@@ -118,7 +117,9 @@ class Celula:
 		btn1b = Tkinter.Button(Bframe1,text="Limpa", relief="groove",activebackground="#ED3921", 	bg=cor,fg="#050505",bd=4, command=desativarTUDO)
 		btn1b.grid(row=1,column=2)
 
-		
+	def CELULAtual(self):
+		return self.CELULA
+	
 
 
 
@@ -133,9 +134,11 @@ c=Celula (root,3,idade,cor3)
 d=Celula (root,4,historia,cor4)
 e=Celula (root,5,gramatica,cor5)
 
-
+# imprimindo lista de todos dicionarios com sinal capturado por fora das celulas
 def leiatudo():
-	pass
+	#pass
+	atual=[a.CELULAtual(),b.CELULAtual(),c.CELULAtual(),d.CELULAtual(),e.CELULAtual()]
+	print atual
 
 
 
