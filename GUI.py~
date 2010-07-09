@@ -20,27 +20,24 @@ var = IntVar()
 def donothing():
 	tkMessageBox.showinfo("Pronto!", "Os relatorios ja foram gerados e estao no diretorio " )
 
-##########################################################
+######################### listas teste
 
-pesquisa=["Marcelo","Jarbas","Jonas","Luana","Solange","Janaina"]
+pesquisa=["Marcelo","Jarbas","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina"]
 controle=["Simone","Tininha","Thiago","Ricardo","Augusto","Manoel"]
-idade=["5 anos","7 anos","8 anos","10 anos"] 
-historia=["Mecânica 1","Mecânica 2","Comportamental 1","Comportamental 2","Intencional"]
-gramatica=["substantivo","verbo","adjetivo","advérbio","conjunção"]
+idade=["2 anos","3 anos","4 anos","5 anos","6 anos","7 anos","8 anos","9 anos","10 anos"] 
+historia=["Mecânica1 (A1)","Mecânica1 (A2)","Mecânica1 (A3)","Mecânica2 (A1)","Mecânica2 (A2)","Mecânica2 (A3)","Comportamental1 (A1)","Comportamental1 (A2)","Comportamental1 (A3)","Comportamental2 (A1)","Comportamental2 (A2)","Comportamental2 (A3)","Intencional (A1)","Intencional (A2)","Intencional (A3)"]
+gramatica=["substantivo","verbo","adjetivo","advérbio","conjunção","preposição","pronome"]
+##############################
 
+########### cores das celulas
 cor1="#BFACC5"
 cor2="#BFBEA2"
 cor3="#FBBEA2"
 cor4="#BFAAA2"
-cor5="#00B3A0"
+cor5="#85ADA2"
+########################################
 
 
-
-	
-#def enche_listbox(lista,lbox):	
-#	for i in lista:
-#		lbox.insert(len(lista), i)	
-		
 
 
 
@@ -48,14 +45,19 @@ cor5="#00B3A0"
 
 
 class Celula:
-	def __init__(self,root,coluna,listadeitens,tipo,cor):
+	def __init__(self,root,coluna,listadeitens,cor):
 
 
 		F1=Tkinter.Frame(root)
 		F1.grid(row=1,column=coluna)
 
+		nomelabels=["Pesquisa","Controle","Faixa Etária","Tipos de História","Classes de Palavras"]
+		tiposchave=["pesquisa","controle","idade","historia","classes"]
 
-		label=Tkinter.Label(F1, text=tipo)
+		tipo=tiposchave[coluna -1] #para uso nos eventos - lembrar que as colunas começam em 1
+
+
+		label=Tkinter.Label(F1, text=nomelabels[coluna-1]) #lembrar que s colunas começam em 1
 		label.pack()
 
 		scrollbar1 = Scrollbar(F1)
@@ -64,31 +66,35 @@ class Celula:
 		lbox = Listbox(F1,selectmode=MULTIPLE,yscrollcommand = scrollbar1.set, exportselection=0)
 		#exportselection=0 para multiplas instancias funcionarem independentes
 
+		# insere os elementos na lista
 		for i in listadeitens:
 			lbox.insert(len(listadeitens), i)
-		tamanhodalista = len(listadeitens)
+		
+		
 
 		#### funções de leitura interna da celula
+		tamanhodalista = len(listadeitens)
 
-		def ativarTUDO():
-			lbox.selection_set(0,tamanhodalista)
-			CELitens=[lbox.get(i) for i in lbox.curselection()]
-			CELULA={tipo:CELitens}
-			print CELULA
+	self.CELULA={}
 
-		def desativarTUDO():
-			lbox.selection_clear(0,tamanhodalista)
-			CELitens=[lbox.get(i) for i in lbox.curselection()]
-			CELULA={tipo:CELitens}
-			print CELULA
+	def ativarTUDO():
+		lbox.selection_set(0,tamanhodalista)
+		CELitens=[lbox.get(i) for i in lbox.curselection()]
+		self.CELULA={tipo:CELitens}
+		print self.CELULA
+			
 
-		def ler(event):
-			print [lbox.get(i) for i in lbox.curselection()]
-			CELitens=[lbox.get(i) for i in lbox.curselection()]
-			CELULA={tipo:CELitens}
-			print CELULA
+	def desativarTUDO():
+		lbox.selection_clear(0,tamanhodalista)
+		CELitens=[lbox.get(i) for i in lbox.curselection()]
+		self.CELULA={tipo:CELitens}
+		print self.CELULA
 
-
+	def ler(event):
+		#print [lbox.get(i) for i in lbox.curselection()]
+		CELitens=[lbox.get(i) for i in lbox.curselection()]
+		self.CELULA={tipo:CELitens}
+		print self.CELULA
 
 		#######################################################
 
@@ -97,26 +103,19 @@ class Celula:
 
 		lbox.bind("<ButtonRelease-1>", ler ) #le o botao do mouse quando solta
 
+		lbox.config(bg=cor, font=("Helvetica",12) ) #configs da lista
 
-
-
-		lbox.config(bg=cor, font=("Helvetica",12) )
+		####### fecha a celula e o scroll
 		lbox.pack(side = RIGHT, fill = BOTH)
 		scrollbar1.config( command = lbox.yview )
-
-
-
-
-
-
-
-
-
+		
+		
+		####### botoes#####################
 		Bframe1=Tkinter.Frame(root)
 		Bframe1.grid(row=2,column=coluna)
-		btn1a = Tkinter.Button(Bframe1,text="Todos", relief="groove",activebackground="#ED2139", 	            bg="darkred",fg="white",bd=4, command=ativarTUDO)
+		btn1a = Tkinter.Button(Bframe1,text="Todos", relief="groove",activebackground="#ED2139", 	            bg=cor,fg="#050505",bd=4, command=ativarTUDO)
 		btn1a.grid(row=1,column=1)
-		btn1b = Tkinter.Button(Bframe1,text="Limpa", relief="groove",activebackground="#ED3921", 	bg="brown",fg="white",bd=4, command=desativarTUDO)
+		btn1b = Tkinter.Button(Bframe1,text="Limpa", relief="groove",activebackground="#ED3921", 	bg=cor,fg="#050505",bd=4, command=desativarTUDO)
 		btn1b.grid(row=1,column=2)
 
 		
@@ -128,34 +127,27 @@ class Celula:
 
 
 
-a=Celula(root,1,pesquisa,"Pesquisa",cor1)
-b=Celula (root,2,controle,"Controle",cor2)
-c=Celula (root,3,idade,"Faixa etária",cor3)
-d=Celula (root,4,historia,"Tipo de História",cor4)
-e=Celula (root,5,gramatica,"Classe de Palavra",cor5)
+a=Celula(root,1,pesquisa,cor1)
+b=Celula (root,2,controle,cor2)
+c=Celula (root,3,idade,cor3)
+d=Celula (root,4,historia,cor4)
+e=Celula (root,5,gramatica,cor5)
 
 
-def leiaA():
-	a.leia=True
+def leiatudo():
+	pass
+
 
 
 
 ################### MENU
 
-menubar = Menu(root)
-filemenu = Menu(menubar, tearoff=0)
-filemenu.add_command(label="Faixa Etaria", command=donothing)
-filemenu.add_command(label="Tipo de História", command=donothing)
-filemenu.add_command(label="Classe de Palavra", command=donothing)
+menubar = Menu(root,bg="#AfAfAf",font=("Arial",12))
 
-filemenu.add_separator()
-
-filemenu.add_command(label="Exit", command=root.quit)
-menubar.add_cascade(label="Medias", menu=filemenu)
-helpmenu = Menu(menubar, tearoff=0)
-helpmenu.add_command(label="Gerar", command=leiaA)
-helpmenu.add_command(label="About...", command=donothing)
-menubar.add_cascade(label="Gerar", menu=helpmenu)
+GERAR = Menu(menubar, font=("Arial",20),activebackground="yellow", tearoff=0)
+GERAR.add_command(label="Média entre os selecionados abaixo", command=leiatudo)
+GERAR.add_command(label="Relatório Geral dos selecionados abaixo", command=donothing)
+menubar.add_cascade(label="Gerar", menu=GERAR)
 
 root.config(menu=menubar)
 
