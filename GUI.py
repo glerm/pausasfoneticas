@@ -5,13 +5,23 @@ import tkMessageBox
 import Tkinter, tkFileDialog
 import tkMessageBox
 import os
+import ScrolledText
 
 homedir = os.path.expanduser('~') 
 
 root = Tk()
 root.title("Tipos de Relatório")
-root
-var = IntVar()
+
+#
+w, h = root.winfo_screenwidth(), root.winfo_screenheight()
+#
+# use the next line if you also want to get rid of the titlebar
+#
+#root.overrideredirect(1)
+#
+root.geometry("%dx%d+0+0" % (w, h))
+
+#var = IntVar()
 
 ######## funcoes globais
 
@@ -176,17 +186,20 @@ menubar.add_cascade(label="Gerar", menu=GERAR)
 root.config(menu=menubar)
 
 ################################
-#Tframe=Tkinter.Frame(root)
-#Tframe.grid(row=3,columnspan=5,sticky=W)
+#Tframe=Tkinter.Frame(root,height="100")
+#Tframe.grid(row=3,column=0,columnspan=6,sticky=W)
 
 Tscroll = Scrollbar(root)
-Tscroll.grid(row=3,column=6,sticky=N+S)
+Tscroll.grid(row=3,column=0,sticky=N+S+E,ipadx="7")
 
 
-text = Text(root,wrap=WORD, yscrollcommand=Tscroll.set,width="100", height="10",bd=5,font=("Arial",12))
+text = Text(root,wrap=WORD,yscrollcommand=Tscroll.set, width="100",height="17",bd=5,font=("Arial",12))
 text.insert(INSERT, atual)
-#text.insert(END, "Bye Bye.....")
-text.grid(row=3,columnspan=6,sticky=W)
+#text.insert(END, "Insere no final")
+
+Tscroll.config(command=text.yview) #ativa o scroll dentro do texto
+text.grid(row=3,column=1,columnspan=6,sticky=N+W,)
+
 
 
 
