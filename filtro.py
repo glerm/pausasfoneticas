@@ -11,6 +11,8 @@ import codecs
 import locale
 language, output_encoding = locale.getdefaultlocale()
 
+AMOSTRAS=["M1A1","M1A2","M1A3","M2A1","M2A2","M2A3","C1A1","C1A2","C1A3","C2A1","C2A2","C2A3","IA1","IA2","IA3"]
+
 
 
 

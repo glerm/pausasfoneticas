@@ -2,13 +2,11 @@
 
 from Tkinter import *
 import tkMessageBox
-import Tkinter
+import Tkinter, tkFileDialog
+import tkMessageBox
+import os
 
-
-
-def sel():
-   selection = "SELECIONADO -> " + str(var.get())
-   label.config(text = selection)
+homedir = os.path.expanduser('~') 
 
 root = Tk()
 root.title("Tipos de Relatório")
@@ -16,6 +14,23 @@ root
 var = IntVar()
 
 ######## funcoes globais
+
+
+"""
+def newDIR():
+	dirname = tkFileDialog.askdirectory(parent=root,initialdir=homedir,title='Selecione o diretorio de trabalho')
+	if len(dirname ) > 0:
+		msg= "Escolhestes" + dirname 
+		print dirname
+		#tkMessageBox.showinfo("Pronto!", "Os relatorios ja foram gerados e estao no diretorio " + dirname)
+		
+
+def EscolheDIR():
+	a=tkMessageBox.askquestion("Confirmar Diretorio", "O diretorio e trabalho é "+ homedir + " ?")
+	if a == "no":
+		newDIR()
+"""
+
 
 def donothing():
 	tkMessageBox.showinfo("Pronto!", "Os relatorios ja foram gerados e estao no diretorio " )
@@ -27,6 +42,7 @@ controle=["Simone","Tininha","Thiago","Ricardo","Augusto","Manoel"]
 idade=["2 anos","3 anos","4 anos","5 anos","6 anos","7 anos","8 anos","9 anos","10 anos"] 
 historia=["Mecânica1 (A1)","Mecânica1 (A2)","Mecânica1 (A3)","Mecânica2 (A1)","Mecânica2 (A2)","Mecânica2 (A3)","Comportamental1 (A1)","Comportamental1 (A2)","Comportamental1 (A3)","Comportamental2 (A1)","Comportamental2 (A2)","Comportamental2 (A3)","Intencional (A1)","Intencional (A2)","Intencional (A3)"]
 gramatica=["substantivo","verbo","adjetivo","advérbio","conjunção","preposição","pronome"]
+sexo=["masculino","feminino"]
 ##############################
 
 ########### cores das celulas
@@ -35,6 +51,7 @@ cor2="#BFBEA2"
 cor3="#FBBEA2"
 cor4="#BFAAA2"
 cor5="#85ADA2"
+cor6="#FBEC5D"
 ########################################
 
 
@@ -46,18 +63,19 @@ cor5="#85ADA2"
 
 class Celula:
 	def __init__(self,root,coluna,listadeitens,cor):
+		
+		
 
-
-		F1=Tkinter.Frame(root)
+		F1=Tkinter.Frame(root,width="12",bd="5")
 		F1.grid(row=1,column=coluna)
 
-		nomelabels=["Pesquisa","Controle","Faixa Etária","Tipos de História","Classes de Palavras"]
-		tiposchave=["pesquisa","controle","idade","historia","classes"]
+		nomelabels=["Pesquisa","Controle","Faixa Etária","Tipos de História","Classes de Palavras","Sexo"]
+		tiposchave=["pesquisa","controle","idade","historia","classes","sexo"]
 
-		tipo=tiposchave[coluna -1] #para uso nos eventos - lembrar que as colunas começam em 1
+		tipo=tiposchave[coluna] #para uso nos eventos - lembrar que as colunas começam em 1
 
 
-		label=Tkinter.Label(F1, text=nomelabels[coluna-1]) #lembrar que s colunas começam em 1
+		label=Tkinter.Label(F1, text=nomelabels[coluna]) #lembrar que s colunas começam em 1
 		label.pack()
 
 		scrollbar1 = Scrollbar(F1)
@@ -81,20 +99,20 @@ class Celula:
 			lbox.selection_set(0,tamanhodalista)
 			CELitens=[lbox.get(i) for i in lbox.curselection()]
 			self.CELULA={tipo:CELitens}
-			print self.CELULA
+			#print self.CELULA
 			
 
 		def desativarTUDO():
 			lbox.selection_clear(0,tamanhodalista)
 			CELitens=[lbox.get(i) for i in lbox.curselection()]
 			self.CELULA={tipo:CELitens}
-			print self.CELULA
+			#print self.CELULA
 
 		def ler(event):
 			#print [lbox.get(i) for i in lbox.curselection()]
 			CELitens=[lbox.get(i) for i in lbox.curselection()]
 			self.CELULA={tipo:CELitens}
-			print self.CELULA
+			#print self.CELULA
 
 		#######################################################
 
@@ -126,18 +144,21 @@ class Celula:
 
 
 
+#EscolheDIR()
 
+a=Celula(root,0,pesquisa,cor1)
+b=Celula (root,1,controle,cor2)
+c=Celula (root,2,idade,cor3)
+d=Celula (root,3,historia,cor4)
+e=Celula (root,4,gramatica,cor5)
+f=Celula (root,5,sexo,cor6)
 
-a=Celula(root,1,pesquisa,cor1)
-b=Celula (root,2,controle,cor2)
-c=Celula (root,3,idade,cor3)
-d=Celula (root,4,historia,cor4)
-e=Celula (root,5,gramatica,cor5)
+atual=["fdlkjfdlksjfslkdjflkdsj"]
 
 # imprimindo lista de todos dicionarios com sinal capturado por fora das celulas
 def leiatudo():
 	#pass
-	atual=[a.CELULAtual(),b.CELULAtual(),c.CELULAtual(),d.CELULAtual(),e.CELULAtual()]
+	atual=[a.CELULAtual(),b.CELULAtual(),c.CELULAtual(),d.CELULAtual(),e.CELULAtual(),f.CELULAtual()]
 	print atual
 
 
@@ -149,12 +170,25 @@ menubar = Menu(root,bg="#AfAfAf",font=("Arial",12))
 
 GERAR = Menu(menubar, font=("Arial",20),activebackground="yellow", tearoff=0)
 GERAR.add_command(label="Média entre os selecionados abaixo", command=leiatudo)
-GERAR.add_command(label="Relatório Geral dos selecionados abaixo", command=donothing)
+GERAR.add_command(label="Relatório Geral dos selecionados abaixo", command=leiatudo)
 menubar.add_cascade(label="Gerar", menu=GERAR)
 
 root.config(menu=menubar)
 
 ################################
+#Tframe=Tkinter.Frame(root)
+#Tframe.grid(row=3,columnspan=5,sticky=W)
+
+Tscroll = Scrollbar(root)
+Tscroll.grid(row=3,column=6,sticky=N+S)
+
+
+text = Text(root,wrap=WORD, yscrollcommand=Tscroll.set,width="100", height="10",bd=5,font=("Arial",12))
+text.insert(INSERT, atual)
+#text.insert(END, "Bye Bye.....")
+text.grid(row=3,columnspan=6,sticky=W)
+
+
 
 
 
