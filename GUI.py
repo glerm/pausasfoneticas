@@ -169,7 +169,11 @@ atual=["fdlkjfdlksjfslkdjflkdsj"]
 def leiatudo():
 	#pass
 	atual=[a.CELULAtual(),b.CELULAtual(),c.CELULAtual(),d.CELULAtual(),e.CELULAtual(),f.CELULAtual()]
-	print atual
+	text.insert(INSERT, "\n")
+	text.insert(INSERT, "-------------------------------------------------------------------------------------------")
+	text.insert(INSERT, "\n")
+	text.insert(INSERT, atual)
+	#return atual
 
 
 
@@ -193,8 +197,8 @@ Tscroll = Scrollbar(root)
 Tscroll.grid(row=3,column=0,sticky=N+S+E,ipadx="7")
 
 
-text = Text(root,wrap=WORD,yscrollcommand=Tscroll.set, width="100",height="17",bd=5,font=("Arial",12))
-text.insert(INSERT, atual)
+text = Text(root,wrap=WORD,yscrollcommand=Tscroll.set, width="100",height="18",bd=5,font=("Arial",12))
+#text.insert(INSERT, atual)
 #text.insert(END, "Insere no final")
 
 Tscroll.config(command=text.yview) #ativa o scroll dentro do texto
