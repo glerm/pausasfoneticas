@@ -168,9 +168,9 @@ def daclasse(classebuscada,classes,palavras): #recebe a classe e busca quais pal
 			l.append(i[1])
 	return l
 
-def mediadaclasse(arq,pclasse): #recebe arquivo e classe buscada e retorna dicionario {pclasse:(peso,media)}
+def mediadaclasse(arq,pclasse): #recebe arquivo e classe buscada e retorna tupla (peso,media)
 	itv=intervalos(arq)
-	x=0.0 #soma dos intervalos
+	x=0.0 #soma dos intervalos em que aparece a classe
 	peso=0 #n de vezes que aparece a classe 
 	media=0
 	for i in itv:
@@ -180,9 +180,24 @@ def mediadaclasse(arq,pclasse): #recebe arquivo e classe buscada e retorna dicio
 	if peso > 0:
 		media=x/peso
 	
-	Mclasse = {pclasse:(peso,media)}
+	Mclasse = (peso,media)
 
 	return Mclasse
+
+def estrutura (arq):
+	E=tag(arq)
+	E['MediaGeral']=media(arq)
+	for i in ['substantivo', 'adjetivo', 'verbo', u'conjunção', u'preposição', 'pronome']
+		E[i]=mediadaclasse(arq,i)
+	return E
+			
+	
+
+
+
+
+
+
 		
 
 

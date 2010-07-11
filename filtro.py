@@ -154,7 +154,7 @@ def media(arq): #media dos intervalos
 
 
 def listadeclasses():
-	return ['substantivo', 'adjetivo', 'verbo', u'conjunção', u'preposição', 'pronome']
+	return [u'substantivo', u'adjetivo', u'verbo', u'conjunção', u'preposição', u'pronome']
 
 
 
@@ -168,7 +168,7 @@ def daclasse(classebuscada,classes,palavras): #recebe a classe e busca quais pal
 			l.append(i[1])
 	return l
 
-def mediadaclasse(arq,pclasse): #recebe arquivo e classe buscada e retorna dicionario {pclasse:(peso,media)}
+def mediadaclasse(arq,pclasse): #recebe arquivo e classe buscada e retorna tupla (peso,media)
 	itv=intervalos(arq)
 	x=0.0 #soma dos intervalos em que aparece a classe
 	peso=0 #n de vezes que aparece a classe 
@@ -180,9 +180,25 @@ def mediadaclasse(arq,pclasse): #recebe arquivo e classe buscada e retorna dicio
 	if peso > 0:
 		media=x/peso
 	
-	Mclasse = {pclasse:(peso,media)}
+	Mclasse = (peso,media)
 
 	return Mclasse
+
+def estrutura (arq):
+	classes=[u'substantivo', u'adjetivo', u'verbo', u'conjunção', u'preposição', u'pronome']
+	E=tag(arq)
+	E['MediaGeral']=media(arq)
+	for i in classes:
+		E[i]=mediadaclasse(arq,i)
+	return E
+			
+	
+
+
+
+
+
+
 		
 
 
