@@ -194,19 +194,6 @@ def estrutura (arq):
 			
 	
 
-
-
-
-
-
-		
-
-
-
-
-
-
-
 ################# abrindo e escrevendo o dicionario
 
 homedir = os.path.expanduser('~')
@@ -226,30 +213,13 @@ def abretudo():
 	
 	return tudo
 
-
-
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+def renderiza():
+	renderizado=[]
+	todos=abretudo()
+	for i in todos:
+		renderizado.append(estrutura(i))
+	return renderizado
+		
 
 
 

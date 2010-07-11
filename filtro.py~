@@ -154,7 +154,7 @@ def media(arq): #media dos intervalos
 
 
 def listadeclasses():
-	return ['substantivo', 'adjetivo', 'verbo', u'conjunção', u'preposição', 'pronome']
+	return [u'substantivo', u'adjetivo', u'verbo', u'conjunção', u'preposição', u'pronome']
 
 
 
@@ -185,26 +185,14 @@ def mediadaclasse(arq,pclasse): #recebe arquivo e classe buscada e retorna tupla
 	return Mclasse
 
 def estrutura (arq):
+	classes=[u'substantivo', u'adjetivo', u'verbo', u'conjunção', u'preposição', u'pronome']
 	E=tag(arq)
 	E['MediaGeral']=media(arq)
-	for i in ['substantivo', 'adjetivo', 'verbo', u'conjunção', u'preposição', 'pronome']
+	for i in classes:
 		E[i]=mediadaclasse(arq,i)
 	return E
 			
 	
-
-
-
-
-
-
-		
-
-
-
-
-
-
 
 ################# abrindo e escrevendo o dicionario
 
@@ -224,31 +212,6 @@ def abretudo():
 			tudo.append(infile)
 	
 	return tudo
-
-
-
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
