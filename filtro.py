@@ -168,6 +168,29 @@ def daclasse(classebuscada,classes,palavras): #recebe a classe e busca quais pal
 			l.append(i[1])
 	return l
 
+def mediadaclasse(arq,pclasse): #recebe arquivo e classe buscada e retorna dicionario {pclasse:(peso,media)}
+	itv=intervalos(arq)
+	x=0.0 #soma dos intervalos em que aparece a classe
+	peso=0 #n de vezes que aparece a classe 
+	media=0
+	for i in itv:
+		if i[1]==pclasse:
+			x=x+i[2]
+			peso=peso+1
+	if peso > 0:
+		media=x/peso
+	
+	Mclasse = {pclasse:(peso,media)}
+
+	return Mclasse
+		
+
+
+
+
+
+
+
 ################# abrindo e escrevendo o dicionario
 
 homedir = os.path.expanduser('~')
@@ -187,9 +210,9 @@ def abretudo():
 	
 	return tudo
 
-def procura
-		
 
+
+	
 
 
 
