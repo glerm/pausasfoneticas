@@ -6,6 +6,7 @@ import Tkinter, tkFileDialog
 import tkMessageBox
 import os
 import ScrolledText
+from data import *
 
 homedir = os.path.expanduser('~') 
 
@@ -163,12 +164,13 @@ d=Celula (root,3,historia,cor4)
 e=Celula (root,4,gramatica,cor5)
 f=Celula (root,5,sexo,cor6)
 
-atual=["fdlkjfdlksjfslkdjflkdsj"]
+atual=Estrutura
 
 # imprimindo lista de todos dicionarios com sinal capturado por fora das celulas
 def leiatudo():
 	#pass
-	atual=[a.CELULAtual(),b.CELULAtual(),c.CELULAtual(),d.CELULAtual(),e.CELULAtual(),f.CELULAtual()]
+	#atual=[a.CELULAtual(),b.CELULAtual(),c.CELULAtual(),d.CELULAtual(),e.CELULAtual(),f.CELULAtual()]
+	
 	text.insert(INSERT, "\n")
 	text.insert(INSERT, "-------------------------------------------------------------------------------------------")
 	text.insert(INSERT, "\n")
