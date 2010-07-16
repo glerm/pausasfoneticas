@@ -6,7 +6,10 @@ import Tkinter, tkFileDialog
 import tkMessageBox
 import os
 import ScrolledText
-from data import *
+from data import * #importa a Estrutura
+from filtro import *
+
+
 
 homedir = os.path.expanduser('~') 
 
@@ -42,16 +45,27 @@ def EscolheDIR():
 		newDIR()
 """
 
+####### Janelas de Aviso:
 
 def donothing():
 	tkMessageBox.showinfo("Pronto!", "Os relatorios ja foram gerados e estao no diretorio " )
 
-######################### listas teste
 
-pesquisa=["Marcelo","Jarbas","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina"]
-controle=["Simone","Tininha","Thiago","Ricardo","Augusto","Manoel"]
-idade=["2 anos","3 anos","4 anos","5 anos","6 anos","7 anos","8 anos","9 anos","10 anos"] 
-historia=["Mecânica1 (A1)","Mecânica1 (A2)","Mecânica1 (A3)","Mecânica2 (A1)","Mecânica2 (A2)","Mecânica2 (A3)","Comportamental1 (A1)","Comportamental1 (A2)","Comportamental1 (A3)","Comportamental2 (A1)","Comportamental2 (A2)","Comportamental2 (A3)","Intencional (A1)","Intencional (A2)","Intencional (A3)"]
+
+
+	
+
+######################### listas teste #############################################################################
+
+pesquisa=["Brenda","Jarbas","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina"]
+controle=["Felipe Moreno","Tininha","Thiago","Ricardo","Augusto","Manoel"]
+idade=["7 anos","8 anos","9 anos","10 anos"] 
+
+#amostras=["Mecânica1 (A1)","Mecânica1 (A2)","Mecânica1 (A3)","Mecânica2 (A1)","Mecânica2 (A2)","Mecânica2 (A3)","Comportamental1 (A1)","Comportamental1 (A2)","Comportamental1 (A3)","Comportamental2 (A1)","Comportamental2 (A2)","Comportamental2 (A3)","Intencional (A1)","Intencional (A2)","Intencional (A3)"]
+
+historia=["Mecânica1","Mecânica2","Comportamental1","Comportamental2","Intencional"]
+
+
 gramatica=["substantivo","verbo","adjetivo","advérbio","conjunção","preposição","pronome"]
 sexo=["masculino","feminino"]
 ##############################
@@ -63,13 +77,13 @@ cor3="#FBBEA2"
 cor4="#BFAAA2"
 cor5="#85ADA2"
 cor6="#FBEC5D"
-########################################
+#####################################################################################################################
 
 
 
 
 
-######### funcao que define a celula de itens com botoes de seleciona tudo/nada e todos itens dentro
+######### Classe que define a celula de itens com botoes de seleciona tudo/nada e todos itens dentro
 
 
 class Celula:
@@ -80,7 +94,7 @@ class Celula:
 		F1=Tkinter.Frame(root,width="12",bd="5")
 		F1.grid(row=1,column=coluna)
 
-		nomelabels=["Pesquisa","Controle","Faixa Etária","Tipos de História","Classes de Palavras","Sexo"]
+		nomelabels=["Pesquisa","Controle","Faixa Etária","Sexo","Tipos de História","Classes de Palavras"]
 		tiposchave=["pesquisa","controle","idade","historia","classes","sexo"]
 
 		tipo=tiposchave[coluna] #para uso nos eventos - lembrar que as colunas começam em 1
@@ -109,20 +123,23 @@ class Celula:
 		def ativarTUDO():
 			lbox.selection_set(0,tamanhodalista)
 			CELitens=[lbox.get(i) for i in lbox.curselection()]
-			self.CELULA={tipo:CELitens}
+			#self.CELULA={tipo:CELitens}
+			self.CELULA=CELitens
 			#print self.CELULA
 			
 
 		def desativarTUDO():
 			lbox.selection_clear(0,tamanhodalista)
 			CELitens=[lbox.get(i) for i in lbox.curselection()]
-			self.CELULA={tipo:CELitens}
+			#self.CELULA={tipo:CELitens}
+			self.CELULA=CELitens
 			#print self.CELULA
 
 		def ler(event):
 			#print [lbox.get(i) for i in lbox.curselection()]
 			CELitens=[lbox.get(i) for i in lbox.curselection()]
-			self.CELULA={tipo:CELitens}
+			#self.CELULA={tipo:CELitens}
+			self.CELULA=CELitens
 			#print self.CELULA
 
 		#######################################################
@@ -148,7 +165,37 @@ class Celula:
 
 	def CELULAtual(self):
 		return self.CELULA
+############################################################################################################
+
+#rotinas da interface	
+
+### detectar se existem 15 amostras ################################
+
+nomes=Nomes()
+AUP_ok=ChecarErrosAmostras()
+
+def checkerror():
+	for n in AUP_ok:
+		if AUP_ok[n] == False:
+			tkMessageBox.showerror("Arquivos .aup deifeituosos"+ n + " apresenta erros de digitação - Confira novamente as amostras " )
+
+
+# insere os sujeitos 
+pesquisa=[]
+controle=[]
+antesentrada=''
+for entrada in Estrutura:
+	if (entrada['Grupo'] == "P"):
+		if entrada['Nome'] != antesentrada:
+			pesquisa.append(entrada['Nome'])
+	if (entrada['Grupo'] == "C"):
+		if entrada['Nome'] != antesentrada:
+			controle.append(entrada['Nome'])
+	antesentrada=entrada['Nome']
 	
+				
+
+
 
 
 
@@ -160,22 +207,39 @@ class Celula:
 a=Celula(root,0,pesquisa,cor1)
 b=Celula (root,1,controle,cor2)
 c=Celula (root,2,idade,cor3)
-d=Celula (root,3,historia,cor4)
-e=Celula (root,4,gramatica,cor5)
-f=Celula (root,5,sexo,cor6)
+d=Celula (root,3,sexo,cor4)
+e=Celula (root,4,historia,cor5)
+f=Celula (root,5,gramatica,cor6)
 
-#atual=renderiza()
+atual=[a.CELULAtual(),b.CELULAtual(),c.CELULAtual(),d.CELULAtual(),e.CELULAtual(),f.CELULAtual()]
+
+
+
+	
+
+def filtraSujeito():
+	for celula_cheia in [a.CELULAtual(),b.CELULAtual()]:
+		for celula_item in celula_cheia:
+			for estrutura_item in Estrutura:
+				if (celula_item == estrutura_item['Nome']):
+					text.insert(INSERT, str(estrutura_item['Nome']+'\n'))
+
+
+#def filtraSexo()
+			
+
 
 # imprimindo lista de todos dicionarios com sinal capturado por fora das celulas
 def leiatudo():
-	#pass
-	atual=[a.CELULAtual(),b.CELULAtual(),c.CELULAtual(),d.CELULAtual(),e.CELULAtual(),f.CELULAtual()]
-	
+
+	filtraSujeito()
 	text.insert(INSERT, "\n")
-	text.insert(INSERT, "-------------------------------------------------------------------------------------------")
-	text.insert(INSERT, "\n")
-	text.insert(INSERT, atual)
+	#text.insert(INSERT, a.CELULAtual())
 	#return atual
+
+def limpa():
+	global text
+	text.delete(0.0,END)
 
 
 
@@ -185,8 +249,10 @@ def leiatudo():
 menubar = Menu(root,bg="#AfAfAf",font=("Arial",12))
 
 GERAR = Menu(menubar, font=("Arial",20),activebackground="yellow", tearoff=0)
-GERAR.add_command(label="Média entre os selecionados abaixo", command=leiatudo)
+GERAR.add_command(label="Média entre os selecionados abaixo", command=filtraSujeito)
 GERAR.add_command(label="Relatório Geral dos selecionados abaixo", command=leiatudo)
+GERAR.add_command(label="Checa erros", command=checkerror)
+GERAR.add_command(label="Limpa", command=limpa)
 menubar.add_cascade(label="Gerar", menu=GERAR)
 
 root.config(menu=menubar)
@@ -195,13 +261,17 @@ root.config(menu=menubar)
 #Tframe=Tkinter.Frame(root,height="100")
 #Tframe.grid(row=3,column=0,columnspan=6,sticky=W)
 
+
 Tscroll = Scrollbar(root)
 Tscroll.grid(row=3,column=0,sticky=N+S+E,ipadx="7")
 
 
+
 text = Text(root,wrap=WORD,yscrollcommand=Tscroll.set, width="100",height="18",bd=5,font=("Arial",12))
+#########################################
 #text.insert(INSERT, atual)
 #text.insert(END, "Insere no final")
+#########################################
 
 Tscroll.config(command=text.yview) #ativa o scroll dentro do texto
 text.grid(row=3,column=1,columnspan=6,sticky=N+W,)

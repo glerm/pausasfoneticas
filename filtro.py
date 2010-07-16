@@ -13,7 +13,7 @@ import os, glob
 
 
 
-AMOSTRAS=["M1A1","M1A2","M1A3","M2A1","M2A2","M2A3","C1A1","C1A2","C1A3","C2A1","C2A2","C2A3","IA1","IA2","IA3"]
+AMOSTRAS=["M1A1","M1A2","M1A3","M2A1","M2A2","M2A3","C1A1","C1A2","C1A3","C2A1","C2A2","C2A3","I1A1","I1A2","I1A3"]
 
 
 
@@ -190,6 +190,8 @@ def estrutura (arq):
 	E['MediaGeral']=media(arq)
 	for i in classes:
 		E[i]=mediadaclasse(arq,i)
+	E['Amostra']=E['Narrativa'][2]+E['Narrativa'][3]# separando Narrativa de Amostra
+	E['Narrativa']=E['Narrativa'][0]+E['Narrativa'][1] # separando Narrativa de Amostra
 	return E
 			
 	
@@ -205,7 +207,7 @@ def sujeitos():
 	sujeitosDIR=[d for d in glob.glob( os.path.join(ROOTpath, '*')) if os.path.isdir(d)]
 	return sujeitosDIR
 
-def abretudo():
+def abretudo(): #lista com todos paths de arquivo
 	tudo=[]
 	for i in sujeitos():
 		for infile in glob.glob( os.path.join(i, '*.aup')):
@@ -219,6 +221,64 @@ def renderiza():
 	for i in todos:
 		renderizado.append(estrutura(i))
 	return renderizado
+
+def DATAFILErenderiza():
+	x='Estrutura='+str(renderiza())
+	dados=open('data.py','w')
+	dados.write(x)
+
+
+from data import *
+
+def Nomes():
+	nomes=list(set([(i['Nome']) for i in Estrutura]))
+	return nomes
+
+
+def EstruturaFiltrada(): #cria uma estrutura em dicionario separadando todas amostras numa unica chave de nome do sujeito
+	n=Nomes()
+	d={}
+	l=[]
+	for i in n:
+		for item in Estrutura:
+			if item['Nome']==i:
+				l.append(item)
+			d[i]=l
+		l=[]		
+	
+	return d	
+
+def ChecarAmostras():
+	l=[]
+	d={}
+	e=EstruturaFiltrada()
+	for key in e:
+		for item in e[key]:
+			l.append(str(item['Narrativa'])+str(item['Amostra']))
+			d[key]=l
+		l=[]	
+	return d
+
+def ChecarErrosAmostras():
+	d={}
+	amostras=ChecarAmostras()
+	AMOSTRAS.sort()
+	for i in amostras:
+		a=amostras[i]
+		a.sort()
+		d={str(i):AMOSTRAS == a}
+	
+	return d
+
+
+#		if a == AMOSTRAS:
+#			print str(i)+": amostras consistentes:"+ str(a)	
+#		else:
+#			print str(i)+": amostras com ERRO:" + str(a)	
+	
+	#return d
+
+	
 		
 
 

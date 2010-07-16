@@ -2,42 +2,71 @@
 
 from Tkinter import *
 import tkMessageBox
-import Tkinter
+import Tkinter, tkFileDialog
+import tkMessageBox
+import os
+import ScrolledText
+from data import *
 
 
-
-def sel():
-   selection = "SELECIONADO -> " + str(var.get())
-   label.config(text = selection)
+homedir = os.path.expanduser('~') 
 
 root = Tk()
 root.title("Tipos de Relatório")
-root
-var = IntVar()
+
+#
+w, h = root.winfo_screenwidth(), root.winfo_screenheight()
+#
+# use the next line if you also want to get rid of the titlebar
+#
+#root.overrideredirect(1)
+#
+root.geometry("%dx%d+0+0" % (w, h))
+
+#var = IntVar()
 
 ######## funcoes globais
+
+
+"""
+def newDIR():
+	dirname = tkFileDialog.askdirectory(parent=root,initialdir=homedir,title='Selecione o diretorio de trabalho')
+	if len(dirname ) > 0:
+		msg= "Escolhestes" + dirname 
+		print dirname
+		#tkMessageBox.showinfo("Pronto!", "Os relatorios ja foram gerados e estao no diretorio " + dirname)
+		
+
+def EscolheDIR():
+	a=tkMessageBox.askquestion("Confirmar Diretorio", "O diretorio e trabalho é "+ homedir + " ?")
+	if a == "no":
+		newDIR()
+"""
+
 
 def donothing():
 	tkMessageBox.showinfo("Pronto!", "Os relatorios ja foram gerados e estao no diretorio " )
 
-##########################################################
+######################### listas teste
 
-pesquisa=["Marcelo","Marbas","Ronas","Guana","Kotange","Kanaima"]
-controle=["Simone","Tininha","Thiago","Ricardo","Augusto","Manoel"]
+pesquisa=["Brenda","Jarbas","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina"]
+controle=["Felipe Moreno","Tininha","Thiago","Ricardo","Augusto","Manoel"]
+idade=["2 anos","3 anos","4 anos","5 anos","6 anos","7 anos","8 anos","9 anos","10 anos"] 
+historia=["Mecânica1 (A1)","Mecânica1 (A2)","Mecânica1 (A3)","Mecânica2 (A1)","Mecânica2 (A2)","Mecânica2 (A3)","Comportamental1 (A1)","Comportamental1 (A2)","Comportamental1 (A3)","Comportamental2 (A1)","Comportamental2 (A2)","Comportamental2 (A3)","Intencional (A1)","Intencional (A2)","Intencional (A3)"]
+gramatica=["substantivo","verbo","adjetivo","advérbio","conjunção","preposição","pronome"]
+sexo=["masculino","feminino"]
+##############################
 
+########### cores das celulas
 cor1="#BFACC5"
 cor2="#BFBEA2"
 cor3="#FBBEA2"
 cor4="#BFAAA2"
-cor5="#00B3A0"
+cor5="#85ADA2"
+cor6="#FBEC5D"
+########################################
 
 
-
-	
-#def enche_listbox(lista,lbox):	
-#	for i in lista:
-#		lbox.insert(len(lista), i)	
-		
 
 
 
@@ -45,86 +74,155 @@ cor5="#00B3A0"
 
 
 class Celula:
-	def __init__(self,root,coluna,listadeitens,tipo,cor):
+	def __init__(self,root,coluna,listadeitens,cor):
+		
+		
 
-		F1=Tkinter.Frame(root)
+		F1=Tkinter.Frame(root,width="12",bd="5")
 		F1.grid(row=1,column=coluna)
 
+		nomelabels=["Pesquisa","Controle","Faixa Etária","Tipos de História","Classes de Palavras","Sexo"]
+		tiposchave=["pesquisa","controle","idade","historia","classes","sexo"]
 
-		label=Tkinter.Label(F1, text=tipo)
+		tipo=tiposchave[coluna] #para uso nos eventos - lembrar que as colunas começam em 1
+
+
+		label=Tkinter.Label(F1, text=nomelabels[coluna]) #lembrar que s colunas começam em 1
 		label.pack()
 
 		scrollbar1 = Scrollbar(F1)
 		scrollbar1.pack( side = RIGHT, fill=Y )
 
 		lbox = Listbox(F1,selectmode=MULTIPLE,yscrollcommand = scrollbar1.set, exportselection=0)
+		#exportselection=0 para multiplas instancias funcionarem independentes
 
+		# insere os elementos na lista
 		for i in listadeitens:
 			lbox.insert(len(listadeitens), i)
+		
+		
+
+		#### funções de leitura interna da celula
 		tamanhodalista = len(listadeitens)
 
-		lbox.config(bg=cor, font=("Helvetica",12) )
-		lbox.pack(side = RIGHT, fill = BOTH)
-		scrollbar1.config( command = lbox.yview )
-
-
+		self.CELULA={}
 
 		def ativarTUDO():
 			lbox.selection_set(0,tamanhodalista)
+			CELitens=[lbox.get(i) for i in lbox.curselection()]
+			#self.CELULA={tipo:CELitens}
+			self.CELULA=CELitens
+			#print self.CELULA
+			
 
 		def desativarTUDO():
 			lbox.selection_clear(0,tamanhodalista)
+			CELitens=[lbox.get(i) for i in lbox.curselection()]
+			#self.CELULA={tipo:CELitens}
+			self.CELULA=CELitens
+			#print self.CELULA
+
+		def ler(event):
+			#print [lbox.get(i) for i in lbox.curselection()]
+			CELitens=[lbox.get(i) for i in lbox.curselection()]
+			#self.CELULA={tipo:CELitens}
+			self.CELULA=CELitens
+			#print self.CELULA
+
+		#######################################################
+
+
+
+		lbox.bind("<ButtonRelease-1>", ler ) #le o botao do mouse quando solta
+
+		lbox.config(bg=cor, font=("Helvetica",12) ) #configs da lista
+
+		####### fecha a celula e o scroll
+		lbox.pack(side = RIGHT, fill = BOTH)
+		scrollbar1.config( command = lbox.yview )
+		
+		
+		####### botoes#####################
+		Bframe1=Tkinter.Frame(root)
+		Bframe1.grid(row=2,column=coluna)
+		btn1a = Tkinter.Button(Bframe1,text="Todos", relief="groove",activebackground="#ED2139", 	            bg=cor,fg="#050505",bd=4, command=ativarTUDO)
+		btn1a.grid(row=1,column=1)
+		btn1b = Tkinter.Button(Bframe1,text="Limpa", relief="groove",activebackground="#ED3921", 	bg=cor,fg="#050505",bd=4, command=desativarTUDO)
+		btn1b.grid(row=1,column=2)
+
+	def CELULAtual(self):
+		return self.CELULA
+	
+
+
+
+
+
+
+#EscolheDIR()
+
+a=Celula(root,0,pesquisa,cor1)
+b=Celula (root,1,controle,cor2)
+c=Celula (root,2,idade,cor3)
+d=Celula (root,3,historia,cor4)
+e=Celula (root,4,gramatica,cor5)
+f=Celula (root,5,sexo,cor6)
+
+atual=[a.CELULAtual(),b.CELULAtual(),c.CELULAtual(),d.CELULAtual(),e.CELULAtual(),f.CELULAtual()]
+
+pesquisa=a.CELULAtual()
+
+def filtraSujeito():
+	for celula_cheia in [a.CELULAtual(),b.CELULAtual(),c.CELULAtual(),d.CELULAtual(),e.CELULAtual(),f.CELULAtual()]:
+		for celula_item in celula_cheia:
+			for estrutura_item in Estrutura:
+				if (celula_item == estrutura_item['Nome']) or (celula_item == estrutura_item['Idade']):
+					text.insert(INSERT, str(estrutura_item) + "\n\n")
 
 		
 
-			
 
+# imprimindo lista de todos dicionarios com sinal capturado por fora das celulas
+def leiatudo():
+	#pass
+	#atual=[a.CELULAtual(),b.CELULAtual(),c.CELULAtual(),d.CELULAtual(),e.CELULAtual(),f.CELULAtual()]
 
-		Bframe1=Tkinter.Frame(root)
-		Bframe1.grid(row=2,column=coluna)
-		btn1a = Tkinter.Button(Bframe1,text="Todos", relief="groove",activebackground="#ED2139", 	            bg="darkred",fg="white",bd=4, command=ativarTUDO)
-		btn1a.grid(row=1,column=1)
-		btn1b = Tkinter.Button(Bframe1,text="Limpa", relief="groove",activebackground="#ED3921", 	bg="brown",fg="white",bd=4, command=desativarTUDO)
-		btn1b.grid(row=1,column=2)
-
-	#self.itens= [lbox.get(i) for i in lbox.curselection()]
-
-
-
-
-
-
-
-
-a=Celula(root,1,pesquisa,"Pesquisa",cor1)
-b=Celula (root,2,controle,"Controle",cor2)
-c=Celula (root,3,controle,"Faixa etária",cor3)
-d=Celula (root,4,controle,"Tipo de História",cor4)
-e=Celula (root,5,controle,"Classe de Palavra",cor5)
+	filtraSujeito()
+	text.insert(INSERT, "\n")
+	#text.insert(INSERT, a.CELULAtual())
+	#return atual
 
 
 
 
 ################### MENU
 
-menubar = Menu(root)
-filemenu = Menu(menubar, tearoff=0)
-filemenu.add_command(label="Faixa Etaria", command=donothing)
-filemenu.add_command(label="Tipo de História", command=donothing)
-filemenu.add_command(label="Classe de Palavra", command=donothing)
+menubar = Menu(root,bg="#AfAfAf",font=("Arial",12))
 
-filemenu.add_separator()
-
-filemenu.add_command(label="Exit", command=root.quit)
-menubar.add_cascade(label="Medias", menu=filemenu)
-helpmenu = Menu(menubar, tearoff=0)
-helpmenu.add_command(label="Gerar", command=donothing)
-helpmenu.add_command(label="About...", command=donothing)
-menubar.add_cascade(label="Gerar", menu=helpmenu)
+GERAR = Menu(menubar, font=("Arial",20),activebackground="yellow", tearoff=0)
+GERAR.add_command(label="Média entre os selecionados abaixo", command=leiatudo)
+GERAR.add_command(label="Relatório Geral dos selecionados abaixo", command=leiatudo)
+menubar.add_cascade(label="Gerar", menu=GERAR)
 
 root.config(menu=menubar)
 
 ################################
+#Tframe=Tkinter.Frame(root,height="100")
+#Tframe.grid(row=3,column=0,columnspan=6,sticky=W)
+
+Tscroll = Scrollbar(root)
+Tscroll.grid(row=3,column=0,sticky=N+S+E,ipadx="7")
+
+
+text = Text(root,wrap=WORD,yscrollcommand=Tscroll.set, width="100",height="18",bd=5,font=("Arial",12))
+text.insert(INSERT, atual)
+#text.insert(END, "Insere no final")
+
+Tscroll.config(command=text.yview) #ativa o scroll dentro do texto
+text.grid(row=3,column=1,columnspan=6,sticky=N+W,)
+
+
+
 
 
 
