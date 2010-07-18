@@ -87,7 +87,7 @@ cor6="#FBEC5D"
 
 
 class Celula:
-	def __init__(self,root,coluna,listadeitens,cor):
+	def __init__(self,root,coluna,listadeitens,cor,es):
 		
 		
 
@@ -106,8 +106,8 @@ class Celula:
 		scrollbar1 = Scrollbar(F1)
 		scrollbar1.pack( side = RIGHT, fill=Y )
 
-		lbox = Listbox(F1,selectmode=MULTIPLE,yscrollcommand = scrollbar1.set, exportselection=0)
-		#exportselection=0 para multiplas instancias funcionarem independentes
+		lbox = Listbox(F1,selectmode=MULTIPLE,yscrollcommand = scrollbar1.set, exportselection=es)
+		#exportselection=0 para multiplas instancias funcionarem independentes, 1 para dependentes 
 
 		# insere os elementos na lista
 		for i in listadeitens:
@@ -123,24 +123,20 @@ class Celula:
 		def ativarTUDO():
 			lbox.selection_set(0,tamanhodalista)
 			CELitens=[lbox.get(i) for i in lbox.curselection()]
-			#self.CELULA={tipo:CELitens}
 			self.CELULA=CELitens
-			#print self.CELULA
+			
 			
 
 		def desativarTUDO():
 			lbox.selection_clear(0,tamanhodalista)
 			CELitens=[lbox.get(i) for i in lbox.curselection()]
-			#self.CELULA={tipo:CELitens}
 			self.CELULA=CELitens
-			#print self.CELULA
+			
 
 		def ler(event):
-			#print [lbox.get(i) for i in lbox.curselection()]
 			CELitens=[lbox.get(i) for i in lbox.curselection()]
-			#self.CELULA={tipo:CELitens}
 			self.CELULA=CELitens
-			#print self.CELULA
+			
 
 		#######################################################
 
@@ -177,10 +173,10 @@ AUP_ok=ChecarErrosAmostras()
 def checkerror():
 	for n in AUP_ok:
 		if AUP_ok[n] == False:
-			tkMessageBox.showerror("Arquivos .aup deifeituosos"+ n + " apresenta erros de digitação - Confira novamente as amostras " )
+			tkMessageBox.showerror("Arquivos .aup defeituosos", n + " apresenta erros de digitação:\nConfira novamente as amostras " )
 
 
-# insere os sujeitos 
+# insere os sujeitos LEMBRE DE MODIFICAR ESTA FUNÇÃO USANDO A EstruturaFiltrada()
 pesquisa=[]
 controle=[]
 antesentrada=''
@@ -202,30 +198,39 @@ for entrada in Estrutura:
 
 
 
-#EscolheDIR()
+#insere as celulas de filtros Listbox no root frame! #####################################
 
-a=Celula(root,0,pesquisa,cor1)
-b=Celula (root,1,controle,cor2)
-c=Celula (root,2,idade,cor3)
-d=Celula (root,3,sexo,cor4)
-e=Celula (root,4,historia,cor5)
-f=Celula (root,5,gramatica,cor6)
-
-atual=[a.CELULAtual(),b.CELULAtual(),c.CELULAtual(),d.CELULAtual(),e.CELULAtual(),f.CELULAtual()]
-
-
-
+Pesquisa=Celula(root,0,pesquisa,cor1,0)
+Controle=Celula (root,1,controle,cor2,0)
+Idade=Celula (root,2,idade,cor3,1)
+Historia=Celula (root,4,historia,cor5,1)
+Gramatica=Celula (root,5,gramatica,cor6,1)
+#########################################################################
 	
 
 def filtraSujeito():
-	for celula_cheia in [a.CELULAtual(),b.CELULAtual()]:
+	for celula_cheia in [Pesquisa.CELULAtual(),Controle.CELULAtual()]:
 		for celula_item in celula_cheia:
 			for estrutura_item in Estrutura:
 				if (celula_item == estrutura_item['Nome']):
 					text.insert(INSERT, str(estrutura_item['Nome']+'\n'))
 
+def filtraIdade():
+	for celula_item in Idade.CELULAtual():
+		for estrutura_item in Estrutura:
+			if (celula_item.split(' ')[0] == estrutura_item['Idade'].split('a')[0]): #separa o numero da idade
+				text.insert(INSERT, str(estrutura_item['Nome']+'\n'))	
 
-#def filtraSexo()
+def filtraHistoria():
+
+
+
+def filtraGramatica():
+
+
+
+
+
 			
 
 
@@ -249,8 +254,8 @@ def limpa():
 menubar = Menu(root,bg="#AfAfAf",font=("Arial",12))
 
 GERAR = Menu(menubar, font=("Arial",20),activebackground="yellow", tearoff=0)
-GERAR.add_command(label="Média entre os selecionados abaixo", command=filtraSujeito)
-GERAR.add_command(label="Relatório Geral dos selecionados abaixo", command=leiatudo)
+GERAR.add_command(label="Media por Sujeito", command=filtraSujeito)
+GERAR.add_command(label="Media por Idade", command=filtraIdade)
 GERAR.add_command(label="Checa erros", command=checkerror)
 GERAR.add_command(label="Limpa", command=limpa)
 menubar.add_cascade(label="Gerar", menu=GERAR)
