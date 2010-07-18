@@ -71,7 +71,7 @@ def tag(arq): #recebe arquivo, extrai a sopa XML tag deste e retorna dicionario
 	if d.has_key('GENRE'):
 		d.pop('GENRE')
 	if d.has_key(u'G\xeanero'):
-		d['Sexo']=d.pop(u'G\xeanero') #elimina possibilidade de erro (fazer tambem com acentos e minusculas)
+		d['Sexo']=d.pop(u'G\xeanero') #elimina possibilidade de erro na chave(fazer tambem com acentos e minusculas)
 
 
 	return d
@@ -251,7 +251,7 @@ def ConfereChavesEstrutura(Estrutura_item): # teste de formatação das chaves d
 
 def EstruturaFiltrada(): #cria uma estrutura em dicionario separadando todas amostras numa unica chave de nome do sujeito
 # retorna par (lista de medias da amostra, ficha ) - "ficha" tem os dados imutaveis - Sexo, Numero,Idade,Grupo
-	from data import Estrutura	
+	from data import Estrutura #LEMBRE DE ESCREVER ESTA ESTRUTURA NO ARQUIVO - VAI FACILITAR	
 	n=Nomes()
 	d={}
 	dDados={}
@@ -276,7 +276,10 @@ def EstruturaFiltrada(): #cria uma estrutura em dicionario separadando todas amo
 			d[i]=(l,dDados) # par (listadeamostras,ficha)
 			
 		l=[]
-		dDados={}		
+		dDados={}
+
+
+			
 	
 	return d 	
 
@@ -285,7 +288,7 @@ def SepararAmostrasIndividuais():
 	d={}
 	e=EstruturaFiltrada()
 	for key in e:
-		for item in e[key]:
+		for item in e[key][0]:# e[key] contem o par (listadeamostras,ficha)
 			l.append(str(item['Narrativa'])+str(item['Amostra']))
 			d[key]=l
 		l=[]	
@@ -293,14 +296,15 @@ def SepararAmostrasIndividuais():
 
 AMOSTRAS=["M1A1","M1A2","M1A3","M2A1","M2A2","M2A3","C1A1","C1A2","C1A3","C2A1","C2A2","C2A3","I1A1","I1A2","I1A3"]
 
-def ChecarErrosAmostras():
+def ChecarErrosAmostras(): #compara padroes dos lotes de arquivo (testar a necessidade de implementar outros casos)
 	d={}
 	amostras=SepararAmostrasIndividuais()
 	AMOSTRAS.sort()
 	for i in amostras:
 		a=amostras[i]
 		a.sort()
-		d={str(i):AMOSTRAS == a}
+		d[str(i)]=(AMOSTRAS == a)
+		#d={str(i):AMOSTRAS == a}
 	
 	return d
 
