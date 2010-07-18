@@ -61,7 +61,7 @@ def tag(arq): #recebe arquivo, extrai a sopa XML tag deste e retorna dicionario
 		d[s('tag')[n]['name']]=s('tag')[n]['value'] #formata o dicionario
 		n=n+1
 
-	#remover as tags indesejadas
+	#remover as tags indesejadas depois da contrução
 	if d.has_key('id3v2'):
 		d.pop('id3v2')
 	if d.has_key('TRACKNUMBER'):
@@ -70,6 +70,8 @@ def tag(arq): #recebe arquivo, extrai a sopa XML tag deste e retorna dicionario
 		d.pop('YEAR')
 	if d.has_key('GENRE'):
 		d.pop('GENRE')
+	if d.has_key(u'G\xeanero'):
+		d['Sexo']=d.pop(u'G\xeanero') #elimina possibilidade de erro (fazer tambem com acentos e minusculas)
 
 
 	return d
@@ -185,7 +187,8 @@ def mediadaclasse(arq,pclasse): #recebe arquivo e classe buscada e retorna tupla
 
 	return Mclasse
 
-def estrutura (arq):
+####################### melhorar:
+def estrutura (arq): #inserir a contrução da tag aqui dentro mesmo? ele nao precisa abrir o arq - 3x mudar isso
 	classes=[u'substantivo', u'adjetivo', u'verbo', u'conjunção', u'preposição', u'pronome']
 	E=tag(arq)
 	E['MediaGeral']=media(arq)
@@ -194,7 +197,7 @@ def estrutura (arq):
 	E['Amostra']=E['Narrativa'][2]+E['Narrativa'][3]# separando Narrativa de Amostra
 	E['Narrativa']=E['Narrativa'][0]+E['Narrativa'][1] # separando Narrativa de Amostra
 	return E
-			
+##########################################################################			
 	
 
 ################# abrindo e escrevendo o dicionario
@@ -235,7 +238,7 @@ def Nomes():
 	nomes=list(set([(i['Nome']) for i in Estrutura]))
 	return nomes
 
-def ConfereChavesEstrutura(Estrutura_item):
+def ConfereChavesEstrutura(Estrutura_item): # teste de formatação das chaves do dicionario estrutura basico
 		chaves=[u'adjetivo', u'Nome', 'MediaGeral', 'Amostra', u'Narrativa', u'pronome', u'verbo', u'substantivo', u'Numero', u'Sexo', u'Idade', u'preposi\xe7\xe3o', u'Grupo', u'conjun\xe7\xe3o']
 		chaves.sort()
 		E=Estrutura_item.keys()
@@ -256,27 +259,24 @@ def EstruturaFiltrada(): #cria uma estrutura em dicionario separadando todas amo
 
 	for i in n:
 		for item in Estrutura:
-			if ConfereChavesEstrutura(item) == True:
+			'''if ConfereChavesEstrutura(item) == True:
 				print "ok"
 			else:
-				print "Erro na amostra: " + str(item['Amostra']) + str (item['Narrativa']) +" " +str(item.keys())
-
-
-
-
-			#if item['Nome']==i:
-			#	print item.keys()
-				#numero=item.pop('Numero')
-				#idade=item.pop('Idade')
-				#grupo=item.pop('Grupo')
-				#l.append(item)
-				#dDados['Sexo']=sexo				
-				#dDados['Numero']=numero
-				#dDados['Idade']=idade
-				#dDados['Grupo']=grupo
-			#d[i]=(l,dDados) # par (listadeamostras,ficha)
+				print "Erro na amostra: " + str(item['Amostra']) + str (item['Narrativa'])'''
+			if item['Nome']==i:
+				l.append(item)
+				sexo=item.pop('Sexo')
+				numero=item.pop('Numero')
+				idade=item.pop('Idade')
+				grupo=item.pop('Grupo')
+				dDados['Sexo']=sexo				
+				dDados['Numero']=numero
+				dDados['Idade']=idade
+				dDados['Grupo']=grupo
+			d[i]=(l,dDados) # par (listadeamostras,ficha)
 			
-		#l=[]		
+		l=[]
+		dDados={}		
 	
 	return d 	
 

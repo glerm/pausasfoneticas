@@ -3,7 +3,7 @@
 <project xmlns="http://audacity.sourceforge.net/xml/" projname="Felipe Moreno C1A1_data" version="1.3.0" audacityversion="1.3.12-beta" sel0="0.0000000000" sel1="0.2615932000" vpos="0" h="11.1087772858" zoom="272.8473100155" rate="96000">
 	<tags>
 		<tag name="id3v2" value="1"/>
-		<tag name="Sexo" value="M"/>
+		<tag name="Gênero" value="M"/>
 		<tag name="TRACKNUMBER" value="0"/>
 		<tag name="YEAR" value="0"/>
 		<tag name="Narrativa" value="C1A1"/>
