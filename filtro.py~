@@ -10,6 +10,7 @@ import sys
 import codecs
 import locale
 import os, glob
+import numpy
 
 
 
@@ -298,27 +299,41 @@ def EstruturaFiltrada(): #cria uma estrutura em dicionario separadando todas amo
 	
 	return d 	
 
-def MediasTodasAmostras():
+def MediasTodasNarrativas():
 	nomes=Nomes()
 	narrativas=listadenarrativas()
 	E=EstruturaFiltrada()
 	l=[]
 	d={}
 	l2=[]
-	for nome in nomes:
+	for nome in nomes: #MEDIA DE TODAS AS AMOSTRAS NUMA LISTA
 		for item in E[nome][0]:
 			for narrativa in narrativas:
 				if item['Narrativa'] == narrativa:					
 					l.append( (item['Nome'],narrativa,str(item['Amostra']),item['MediaGeral']) )
 
 	d = {}
-	for x,y,z,a in l:
+	for x,y,z,a in l: #separa todas as amostras num dicionario {sujeito:[amostras]}
 	    d.setdefault(x, []).append((y,z,a))
-
 	
+	dN= {} #dicionario d narrativas e suas 3 amostras
+	for key in d.iterkeys():
+		dN[key]={}
+		for x,y,z in d[key]:
+			dN[key].setdefault(x, []).append(z)
+
+	d={}
+	for key in dN.iterkeys(): #dicionario Sujeito:{media entre as tres amostras da Narrativa para cada}
+		d[key]={}
+		for i in dN[key].iterkeys():
+			#d[key].setdefault(i, []).append(numpy.mean(dN[key][i]))
+			d[key][i]=(numpy.mean(dN[key][i]))
+
+		
+
 
 	return d
-
+	
 
 ########checar se existem todas amostras
 
