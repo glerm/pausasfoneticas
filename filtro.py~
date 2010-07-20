@@ -159,6 +159,11 @@ def media(arq): #media dos intervalos
 def listadeclasses():
 	return [u'substantivo', u'adjetivo', u'verbo', u'conjunção', u'preposição', u'pronome']
 
+def listadeamostras():
+	return ["M1A1","M1A2","M1A3","M2A1","M2A2","M2A3","C1A1","C1A2","C1A3","C2A1","C2A2","C2A3","I1A1","I1A2","I1A3"]
+def listadenarrativas():
+	return ["M1","M2","C1","C2","I1"]
+
 
 
 #buscas
@@ -256,27 +261,52 @@ def EstruturaFiltrada(): #cria uma estrutura em dicionario separadando todas amo
 	d={}
 	dDados={}
 	l=[]
-
+	MediaGeralTotal=0.0
+	MediaGeralNarrativa=0.0
+	lc=listadeclasses()
+	nr=listadenarrativas()
+	MediaClasses={}
+	MediaNarrativas={}
+	cSOMA=0.0
+	pSOMA=0.0
 	for i in n:
 		for item in Estrutura:
-			'''if ConfereChavesEstrutura(item) == True:
-				print "ok"
-			else:
-				print "Erro na amostra: " + str(item['Amostra']) + str (item['Narrativa'])'''
 			if item['Nome']==i:
 				l.append(item)
+				MediaGeralTotal = MediaGeralTotal + item['MediaGeral']
 				sexo=item.pop('Sexo')
 				numero=item.pop('Numero')
 				idade=item.pop('Idade')
 				grupo=item.pop('Grupo')
-				dDados['Sexo']=sexo				
-				dDados['Numero']=numero
-				dDados['Idade']=idade
-				dDados['Grupo']=grupo
-			d[i]=(l,dDados) # par (listadeamostras,ficha)
+				for classe in lc:
+					cSOMA=(item[classe][0]*item[classe][1])+cSOMA
+					pSOMA=item[classe][0]+pSOMA
+					MediaClasses[classe]=cSOMA/pSOMA
+				cSOMA=0.0
+				pSOMA=0.0
+				for narrativa in nr:
+					if item['Narrativa'] == narrativa:
+						MediaGeralNarrativa=item['MediaGeral']+MediaGeralNarrativa
+						MediaNarrativas[narrativa]=MediaGeralNarrativa/3 
+				MediaGeralNarrativa=0.0
+					
+
+		
+		dDados['MediaDasClasses']=MediaClasses
+		dDados['Sexo']=sexo				
+		dDados['Numero']=numero
+		dDados['Idade']=idade
+		dDados['Grupo']=grupo
+		dDados['MediaGeralTotal']=MediaGeralTotal/15
+		d[i]=(l,dDados) # par (listadeamostras,ficha)
+
+		MediaGeralTotal=0 #zera para proximo sujeito
+		l=[]#zera para proximo sujeito
+		dDados={}#zera para proximo sujeito
+
+		
+
 			
-		l=[]
-		dDados={}		
 	
 	return d 	
 
@@ -291,16 +321,16 @@ def SepararAmostrasIndividuais():
 		l=[]	
 	return d
 
-AMOSTRAS=["M1A1","M1A2","M1A3","M2A1","M2A2","M2A3","C1A1","C1A2","C1A3","C2A1","C2A2","C2A3","I1A1","I1A2","I1A3"]
 
 def ChecarErrosAmostras(): #compara padroes dos lotes de arquivo (testar a necessidade de implementar outros casos)
 	d={}
 	amostras=SepararAmostrasIndividuais()
-	AMOSTRAS.sort()
+	AMOSTRAS_PADRAO=listadeamostras()
+	AMOSTRAS_PADRAO.sort()
 	for i in amostras:
 		a=amostras[i]
 		a.sort()
-		d[str(i)]=(AMOSTRAS == a)
+		d[str(i)]=(AMOSTRAS_PADRAO == a)
 		#d={str(i):AMOSTRAS == a}
 	
 	return d
