@@ -225,10 +225,12 @@ def filtraIdade():
 				text.insert(INSERT, str(estrutura_item['Nome']+'\n'))	
 
 def filtraHistoria():
+	pass
 
 
 
 def filtraGramatica():
+	pass
 
 
 

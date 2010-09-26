@@ -206,6 +206,7 @@ Idade=Celula (root,2,idade,cor3,1)
 Historia=Celula (root,4,historia,cor5,1)
 Gramatica=Celula (root,5,gramatica,cor6,1)
 #########################################################################
+
 	
 
 def filtraSujeito():
@@ -214,6 +215,8 @@ def filtraSujeito():
 			for estrutura_item in Estrutura:
 				if (celula_item == estrutura_item['Nome']):
 					text.insert(INSERT, str(estrutura_item['Nome']+'\n'))
+
+Amostras_Sujeito=EstruturaFiltrada()
 
 def filtraIdade():
 	for celula_item in Idade.CELULAtual():
