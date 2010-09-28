@@ -85,8 +85,8 @@ class Celula:
 		F1=Tkinter.Frame(root,width="12",bd="5")
 		F1.grid(row=1,column=coluna)
 
-		nomelabels=["Sujeitos","Grupos","Faixa Etária","Tipos de História","Classes de Palavras","Sexo"]
-		tiposchave=["sujeitos","grupos","idade","historia","classes","sexo"]
+		nomelabels=["Pesquisa","Controle","Faixa Etária","Tipos de História","Classes de Palavras","Sexo"]
+		tiposchave=["pesquisa","controle","idade","historia","classes","sexo"]
 
 		tipo=tiposchave[coluna] #para uso nos eventos - lembrar que as colunas começam em 1
 
@@ -165,8 +165,8 @@ class Celula:
 
 #EscolheDIR()
 
-a=Celula(root,0,sujeitos,cor1)
-b=Celula (root,1,grupos,cor2)
+a=Celula(root,0,pesquisa,cor1)
+b=Celula (root,1,controle,cor2)
 c=Celula (root,2,idade,cor3)
 d=Celula (root,3,historia,cor4)
 e=Celula (root,4,gramatica,cor5)

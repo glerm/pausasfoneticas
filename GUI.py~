@@ -191,13 +191,6 @@ for entrada in Estrutura:
 	
 				
 
-
-
-
-
-
-
-
 #insere as celulas de filtros Listbox no root frame! #####################################
 
 Pesquisa=Celula(root,0,pesquisa,cor1,0)
@@ -225,10 +218,12 @@ def filtraIdade():
 				text.insert(INSERT, str(estrutura_item['Nome']+'\n'))	
 
 def filtraHistoria():
+	pass
 
 
 
 def filtraGramatica():
+	pass
 
 
 

@@ -57,7 +57,7 @@ def donothing():
 
 ######################### listas teste #############################################################################
 
-pesquisa=["Brenda","Jarbas","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina"]
+sujeitos=["Brenda","Jarbas","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina"]
 controle=["Felipe Moreno","Tininha","Thiago","Ricardo","Augusto","Manoel"]
 idade=["7 anos","8 anos","9 anos","10 anos"] 
 
@@ -190,13 +190,6 @@ for entrada in Estrutura:
 	antesentrada=entrada['Nome']
 	
 				
-
-
-
-
-
-
-
 
 #insere as celulas de filtros Listbox no root frame! #####################################
 

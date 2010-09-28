@@ -298,6 +298,6 @@ def EstruturaFiltrada(): #cria uma estrutura em dicionario separadando todas amo
 
 
 def DATAFILE2renderiza():
-	x='EstruturaF='+str(EstruturaFiltrada())
+	x='Estrutura='+str(EstruturaFiltrada())
 	dados=open('data2.py','w')
 	dados.write(x)

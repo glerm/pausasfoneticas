@@ -12,14 +12,14 @@ import numpy
 
 from renderiza import *
 
-from data2 import EstruturaF
+from data2 import Estrutura
 
 
 
 def MediasTodasNarrativas():
 	nomes=Nomes()
 	narrativas=listadenarrativas()
-	E=EstruturaF
+	E=Estrutura
 	l=[]
 	d={}
 	l2=[]
