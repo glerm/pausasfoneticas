@@ -6,7 +6,7 @@ import Tkinter, tkFileDialog
 import tkMessageBox
 import os
 import ScrolledText
-from data import *
+#from data import *
 
 
 homedir = os.path.expanduser('~') 
@@ -85,8 +85,8 @@ class Celula:
 		F1=Tkinter.Frame(root,width="12",bd="5")
 		F1.grid(row=1,column=coluna)
 
-		nomelabels=["Pesquisa","Controle","Faixa Etária","Tipos de História","Classes de Palavras","Sexo"]
-		tiposchave=["pesquisa","controle","idade","historia","classes","sexo"]
+		nomelabels=["Sujeitos","Grupos","Faixa Etária","Tipos de História","Classes de Palavras","Sexo"]
+		tiposchave=["sujeitos","grupos","idade","historia","classes","sexo"]
 
 		tipo=tiposchave[coluna] #para uso nos eventos - lembrar que as colunas começam em 1
 
@@ -165,8 +165,8 @@ class Celula:
 
 #EscolheDIR()
 
-a=Celula(root,0,pesquisa,cor1)
-b=Celula (root,1,controle,cor2)
+a=Celula(root,0,sujeitos,cor1)
+b=Celula (root,1,grupos,cor2)
 c=Celula (root,2,idade,cor3)
 d=Celula (root,3,historia,cor4)
 e=Celula (root,4,gramatica,cor5)
@@ -176,12 +176,24 @@ atual=[a.CELULAtual(),b.CELULAtual(),c.CELULAtual(),d.CELULAtual(),e.CELULAtual(
 
 pesquisa=a.CELULAtual()
 
+'''
 def filtraSujeito():
 	for celula_cheia in [a.CELULAtual(),b.CELULAtual(),c.CELULAtual(),d.CELULAtual(),e.CELULAtual(),f.CELULAtual()]:
 		for celula_item in celula_cheia:
 			for estrutura_item in Estrutura:
 				if (celula_item == estrutura_item['Nome']) or (celula_item == estrutura_item['Idade']):
 					text.insert(INSERT, str(estrutura_item) + "\n\n")
+'''
+
+from filtra import *
+
+mediaN=MediasTodasNarrativas()
+
+def filtraSujeito():
+	for celula_item in a.CELULAtual():
+		for i in EstruturaF.keys():
+			if (celula_item == i):
+				text.insert(INSERT, str(EstruturaF[i][1]) + "\nNARRATIVAS:" + str(mediaN[i]) + "\n\n")
 
 		
 

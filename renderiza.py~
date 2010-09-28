@@ -279,7 +279,7 @@ def EstruturaFiltrada(): #cria uma estrutura em dicionario separadando todas amo
 					MediaClasses[classe]=cSOMA/pSOMA
 				cSOMA=0.0
 				pSOMA=0.0
-
+		
 		dDados['MediaDasClasses']=MediaClasses
 		dDados['Sexo']=sexo				
 		dDados['Numero']=numero
@@ -298,6 +298,6 @@ def EstruturaFiltrada(): #cria uma estrutura em dicionario separadando todas amo
 
 
 def DATAFILE2renderiza():
-	x='Estrutura='+str(EstruturaFiltrada())
+	x='EstruturaF='+str(EstruturaFiltrada())
 	dados=open('data2.py','w')
 	dados.write(x)

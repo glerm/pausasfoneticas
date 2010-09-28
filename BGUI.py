@@ -6,7 +6,7 @@ import Tkinter, tkFileDialog
 import tkMessageBox
 import os
 import ScrolledText
-from data import *
+#from data import *
 
 
 homedir = os.path.expanduser('~') 
@@ -176,12 +176,24 @@ atual=[a.CELULAtual(),b.CELULAtual(),c.CELULAtual(),d.CELULAtual(),e.CELULAtual(
 
 pesquisa=a.CELULAtual()
 
+'''
 def filtraSujeito():
 	for celula_cheia in [a.CELULAtual(),b.CELULAtual(),c.CELULAtual(),d.CELULAtual(),e.CELULAtual(),f.CELULAtual()]:
 		for celula_item in celula_cheia:
 			for estrutura_item in Estrutura:
 				if (celula_item == estrutura_item['Nome']) or (celula_item == estrutura_item['Idade']):
 					text.insert(INSERT, str(estrutura_item) + "\n\n")
+'''
+
+from filtra import *
+
+mediaN=MediasTodasNarrativas()
+
+def filtraSujeito():
+	for celula_item in a.CELULAtual():
+		for i in EstruturaF.keys():
+			if (celula_item == i):
+				text.insert(INSERT, str(EstruturaF[i][1]) + "\nNARRATIVAS: " + str(mediaN[i]) + "\n\n")
 
 		
 

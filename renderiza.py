@@ -279,7 +279,7 @@ def EstruturaFiltrada(): #cria uma estrutura em dicionario separadando todas amo
 					MediaClasses[classe]=cSOMA/pSOMA
 				cSOMA=0.0
 				pSOMA=0.0
-
+		dDados['Nome']=i
 		dDados['MediaDasClasses']=MediaClasses
 		dDados['Sexo']=sexo				
 		dDados['Numero']=numero
