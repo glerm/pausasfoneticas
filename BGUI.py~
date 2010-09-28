@@ -97,8 +97,9 @@ class Celula:
 		scrollbar1 = Scrollbar(F1)
 		scrollbar1.pack( side = RIGHT, fill=Y )
 
-		lbox = Listbox(F1,selectmode=MULTIPLE,yscrollcommand = scrollbar1.set, exportselection=0)
+		lbox = Listbox(F1,selectmode=MULTIPLE,yscrollcommand = scrollbar1.set, exportselection=1)
 		#exportselection=0 para multiplas instancias funcionarem independentes
+		#exportselection=1 para multiplas instancias funcionarem individuais
 
 		# insere os elementos na lista
 		for i in listadeitens:
@@ -159,10 +160,6 @@ class Celula:
 	
 
 
-
-
-
-
 #EscolheDIR()
 
 a=Celula(root,0,sujeitos,cor1)
@@ -193,8 +190,32 @@ def filtraSujeito():
 	for celula_item in a.CELULAtual():
 		for i in EstruturaF.keys():
 			if (celula_item == i):
-				text.insert(INSERT, str(EstruturaF[i][1]) + "\nNARRATIVAS:" + str(mediaN[i]) + "\n\n")
+				text.insert(INSERT, str(EstruturaF[i][1]) + "\nNARRATIVAS: " + str(mediaN[i]) + "\n\n")
 
+def filtraGrupo():
+	for celula_item in b.CELULAtual():
+		if celula_item == 'Pesquisa':
+			grupo='P'
+		if celula_item == 'Controle':
+			grupo='C'	
+		else:
+			pass
+		for i in EstruturaF.keys():
+			if (grupo == EstruturaF[i][1]['Grupo']):
+				text.insert(INSERT, str(EstruturaF[i][1]) + "\nNARRATIVAS: " + str(mediaN[i]) + "\n\n")
+
+def filtraIdade():
+	for celula_item in c.CELULAtual():
+		if celula_item == '7 anos':
+			idade='7a'
+		else:
+			pass
+		for i in EstruturaF.keys():
+			#if (idade == EstruturaF[i][1]['Idade'][1])+EstruturaF[i][0]['Idade'][1]): #so a idade em anos
+			#	text.insert(INSERT, str(EstruturaF[i][1]) + "\nNARRATIVAS: " + str(mediaN[i]) + "\n\n")
+			#else:
+			#	pass
+			text.insert(INSERT, str(EstruturaF[i][1]['Idade']) + "\n\n")
 		
 
 
@@ -202,8 +223,10 @@ def filtraSujeito():
 def leiatudo():
 	#pass
 	#atual=[a.CELULAtual(),b.CELULAtual(),c.CELULAtual(),d.CELULAtual(),e.CELULAtual(),f.CELULAtual()]
+#	filtraSujeito()
+	filtraGrupo()
+#	filtraIdade()
 
-	filtraSujeito()
 	text.insert(INSERT, "\n")
 	#text.insert(INSERT, a.CELULAtual())
 	#return atual
