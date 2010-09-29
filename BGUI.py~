@@ -56,7 +56,7 @@ def donothing():
 sujeitos=["Brenda","Felipe Moreno","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina"]
 grupos=["Pesquisa","Controle"]
 idade=["7 anos","8 anos","9 anos","10 anos"] 
-historia=["Mecânica1","Mecânica2","Comportamental1","Comportamental2","Intencional"]
+historia=["Mecanica1","Mecanica2","Comportamental1","Comportamental2","Intencional"]
 gramatica=["substantivo","verbo","adjetivo","advérbio","conjunção","preposição","pronome"]
 sexo=["masculino","feminino"]
 ##############################
@@ -157,6 +157,10 @@ class Celula:
 
 	def CELULAtual(self):
 		return self.CELULA
+
+	def CELULAlimpa(self):
+		self.CELULA=[]
+		return self.CELULA
 	
 
 
@@ -171,65 +175,80 @@ f=Celula (root,5,sexo,cor6)
 
 atual=[a.CELULAtual(),b.CELULAtual(),c.CELULAtual(),d.CELULAtual(),e.CELULAtual(),f.CELULAtual()]
 
-pesquisa=a.CELULAtual()
 
-'''
-def filtraSujeito():
-	for celula_cheia in [a.CELULAtual(),b.CELULAtual(),c.CELULAtual(),d.CELULAtual(),e.CELULAtual(),f.CELULAtual()]:
-		for celula_item in celula_cheia:
-			for estrutura_item in Estrutura:
-				if (celula_item == estrutura_item['Nome']) or (celula_item == estrutura_item['Idade']):
-					text.insert(INSERT, str(estrutura_item) + "\n\n")
-'''
+
+
 
 from filtra import *
 
 mediaN=MediasTodasNarrativas()
 
 def filtraSujeito():
-	for celula_item in a.CELULAtual():
-		for i in EstruturaF.keys():
-			if (celula_item == i):
-				text.insert(INSERT, str(EstruturaF[i][1]) + "\nNARRATIVAS: " + str(mediaN[i]) + "\n\n")
+	text.delete(0.0,END)
+	if a.CELULAtual():
+		for celula_item in a.CELULAtual():
+			for i in EstruturaF.keys():
+				if (celula_item == i):
+					text.insert(INSERT, str(EstruturaF[i][1]) + "\nNARRATIVAS: " + str(mediaN[i]) + "\n\n")
+	a.CELULAlimpa()	
 
 def filtraGrupo():
-	for celula_item in b.CELULAtual():
-		if celula_item == 'Pesquisa':
-			grupo='P'
-		if celula_item == 'Controle':
-			grupo='C'	
-		else:
-			pass
-		for i in EstruturaF.keys():
-			if (grupo == EstruturaF[i][1]['Grupo']):
-				text.insert(INSERT, str(EstruturaF[i][1]) + "\nNARRATIVAS: " + str(mediaN[i]) + "\n\n")
+	text.delete(0.0,END)
+	if b.CELULAtual():
+		for celula_item in b.CELULAtual():
+			if celula_item == 'Pesquisa':
+				grupo='P'
+			if celula_item == 'Controle':
+				grupo='C'	
+			else:
+				pass
+			for i in EstruturaF.keys():
+				if (grupo == EstruturaF[i][1]['Grupo']):
+					text.insert(INSERT, str(EstruturaF[i][1]) + "\nNARRATIVAS: " + str(mediaN[i]) + "\n\n")
+	b.CELULAlimpa()
+
 
 def filtraIdade():
-	for celula_item in c.CELULAtual():
-		if celula_item == '7 anos':
-			idade='7a'
-		else:
-			pass
-		for i in EstruturaF.keys():
-			#if (idade == EstruturaF[i][1]['Idade'][1])+EstruturaF[i][0]['Idade'][1]): #so a idade em anos
-			#	text.insert(INSERT, str(EstruturaF[i][1]) + "\nNARRATIVAS: " + str(mediaN[i]) + "\n\n")
-			#else:
-			#	pass
-			text.insert(INSERT, str(EstruturaF[i][1]['Idade']) + "\n\n")
-		
+	text.delete(0.0,END)
+	if c.CELULAtual():	
+		for celula_item in c.CELULAtual():
+			if celula_item == '7 anos':
+				idade='7'
+			if celula_item == '8 anos':
+				idade='8'
+			if celula_item == '9 anos':
+				idade='9'
+			if celula_item == '10 anos':
+				idade='10'
+			else:
+				pass
+			for i in EstruturaF.keys():
+				if (idade == ((EstruturaF[i][1]['Idade']).split('a'))[0]): #so a idade em anos corta depois do a
+					text.insert(INSERT, str(EstruturaF[i][1]) + "\nNARRATIVAS: " + str(mediaN[i]) + "\n\n")
+	c.CELULAlimpa()
+
+def filtraHistoria():
+	text.delete(0.0,END)
+	if d.CELULAtual():	
+		for celula_item in d.CELULAtual():
+			if celula_item == u'Mecanica1':
+				h='M1'
+			if celula_item == u'Mecanica2':
+				h='M2'
+			if celula_item == u'Comportamental1':
+				h='C1'
+			if celula_item == u'Comportamental2':
+				h='C2'
+			if celula_item == u'Intencional':
+				h='I1'
+			else:
+				pass
+			
+			for i in EstruturaF.keys():
+				text.insert(INSERT, str(EstruturaF[i][1]) + "\nMedia "+ celula_item +": " + str(mediaN[i][h]) + "\n\n")
+	d.CELULAlimpa()
 
 
-# imprimindo lista de todos dicionarios com sinal capturado por fora das celulas
-def leiatudo():
-	#pass
-	#atual=[a.CELULAtual(),b.CELULAtual(),c.CELULAtual(),d.CELULAtual(),e.CELULAtual(),f.CELULAtual()]
-#	filtraSujeito()
-	filtraGrupo()
-#	filtraIdade()
-
-	text.insert(INSERT, "\n")
-	#text.insert(INSERT, a.CELULAtual())
-	#return atual
 
 def limpa():
 	global text
@@ -241,10 +260,14 @@ def limpa():
 menubar = Menu(root,bg="#AfAfAf",font=("Arial",12))
 
 GERAR = Menu(menubar, font=("Arial",20),activebackground="yellow", tearoff=0)
-GERAR.add_command(label="Média entre os selecionados abaixo", command=leiatudo)
-GERAR.add_command(label="Relatório Geral dos selecionados abaixo", command=leiatudo)
+GERAR.add_command(label="Relatório por Sujeito", command=filtraSujeito)
+GERAR.add_command(label="Relatório por Grupo", command=filtraGrupo)
+GERAR.add_command(label="Relatório por Idade", command=filtraIdade)
+GERAR.add_command(label="Relatório por História", command=filtraHistoria)
 GERAR.add_command(label="Limpa", command=limpa)
 menubar.add_cascade(label="Gerar", menu=GERAR)
+menubar.add_cascade(label="Salvar")
+menubar.add_cascade(label="Salvar", command=limpa)
 
 root.config(menu=menubar)
 
