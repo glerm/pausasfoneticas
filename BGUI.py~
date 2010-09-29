@@ -56,8 +56,8 @@ def donothing():
 sujeitos=["Brenda","Felipe Moreno","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina"]
 grupos=["Pesquisa","Controle"]
 idade=["7 anos","8 anos","9 anos","10 anos"] 
-historia=["Mecanica1","Mecanica2","Comportamental1","Comportamental2","Intencional"]
-gramatica=["substantivo","verbo","adjetivo","advérbio","conjunção","preposição","pronome"]
+historia=[u'Mecânica1',u'Mecânica2',"Comportamental1","Comportamental2","Intencional"]
+gramatica=["substantivo","verbo","adjetivo",u'advérbio',u'conjunção',u'preposição',u'pronome']
 sexo=["masculino","feminino"]
 ##############################
 
@@ -231,9 +231,9 @@ def filtraHistoria():
 	text.delete(0.0,END)
 	if d.CELULAtual():	
 		for celula_item in d.CELULAtual():
-			if celula_item == u'Mecanica1':
+			if celula_item == u'Mecânica1':
 				h='M1'
-			if celula_item == u'Mecanica2':
+			if celula_item == u'Mecânica2':
 				h='M2'
 			if celula_item == u'Comportamental1':
 				h='C1'
@@ -245,8 +245,42 @@ def filtraHistoria():
 				pass
 			
 			for i in EstruturaF.keys():
-				text.insert(INSERT, str(EstruturaF[i][1]) + "\nMedia "+ celula_item +": " + str(mediaN[i][h]) + "\n\n")
+				text.insert(INSERT, str(EstruturaF[i][1]['Nome']) + "\nMedia "+ celula_item +": " + str(mediaN[i][h]) + "\n\n")
 	d.CELULAlimpa()
+
+def filtraGramatica():
+	text.delete(0.0,END)
+	if e.CELULAtual():	
+		for celula_item in e.CELULAtual():
+			for i in EstruturaF.keys():
+				text.insert(INSERT, str(EstruturaF[i][1]['Nome']) + "\nMedia "+ celula_item +": " + str(EstruturaF[i][1]['MediaDasClasses'][celula_item]) + "\n\n")
+	e.CELULAlimpa()
+
+def filtraSexo():
+	text.delete(0.0,END)
+	if f.CELULAtual():
+		for celula_item in f.CELULAtual():
+			if celula_item == 'masculino':
+				sexo='M'
+			if celula_item == 'feminino':
+				sexo='F'	
+			else:
+				pass
+			for i in EstruturaF.keys():
+				if (sexo == EstruturaF[i][1]['Sexo']):
+					text.insert(INSERT, str(EstruturaF[i][1]) + "\nNARRATIVAS: " + str(mediaN[i]) + "\n\n")
+	f.CELULAlimpa()
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -264,6 +298,8 @@ GERAR.add_command(label="Relatório por Sujeito", command=filtraSujeito)
 GERAR.add_command(label="Relatório por Grupo", command=filtraGrupo)
 GERAR.add_command(label="Relatório por Idade", command=filtraIdade)
 GERAR.add_command(label="Relatório por História", command=filtraHistoria)
+GERAR.add_command(label="Relatório por Gramática", command=filtraGramatica)
+GERAR.add_command(label="Relatório por Sexo", command=filtraGramatica)
 GERAR.add_command(label="Limpa", command=limpa)
 menubar.add_cascade(label="Gerar", menu=GERAR)
 menubar.add_cascade(label="Salvar")
