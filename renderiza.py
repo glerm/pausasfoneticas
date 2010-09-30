@@ -273,14 +273,14 @@ def EstruturaFiltrada(): #cria uma estrutura em dicionario separadando todas amo
 				numero=item.pop('Numero')
 				idade=item.pop('Idade')
 				grupo=item.pop('Grupo')
-				for classe in lc:
-					cSOMA=(item[classe][0]*item[classe][1])+cSOMA
-					pSOMA=item[classe][0]+pSOMA
-					MediaClasses[classe]=cSOMA/pSOMA
-				cSOMA=0.0
-				pSOMA=0.0
-		dDados['Nome']=i
-		dDados['MediaDasClasses']=MediaClasses
+				#for classe in lc:
+				#	cSOMA=(item[classe][0]*item[classe][1])+cSOMA
+				#	pSOMA=item[classe][0]+pSOMA
+				#	MediaClasses[classe]=cSOMA/pSOMA
+				#	dDados['MediaDasClasses']=MediaClasses
+				#cSOMA=0.0
+				#pSOMA=0.0
+		
 		dDados['Sexo']=sexo				
 		dDados['Numero']=numero
 		dDados['Idade']=idade
@@ -292,6 +292,7 @@ def EstruturaFiltrada(): #cria uma estrutura em dicionario separadando todas amo
 		MediaGeralTotal=0.0 #zera para proximo sujeito
 		l=[]#zera para proximo sujeito
 		dDados={}#zera para proximo sujeito
+	dDados['MediaDasClasses']=MediaClasses
 			
 	
 	return d 	

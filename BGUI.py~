@@ -57,7 +57,7 @@ sujeitos=["Brenda","Felipe Moreno","Jonas","Luana","Solange","Janaina","Marcelo"
 grupos=["Pesquisa","Controle"]
 idade=["7 anos","8 anos","9 anos","10 anos"] 
 historia=[u'Mecânica1',u'Mecânica2',"Comportamental1","Comportamental2","Intencional"]
-gramatica=["substantivo","verbo","adjetivo",u'advérbio',u'conjunção',u'preposição',u'pronome']
+gramatica=["substantivo","verbo","adjetivo",u'conjunção',u'preposição',u'pronome']
 sexo=["masculino","feminino"]
 ##############################
 
@@ -245,7 +245,7 @@ def filtraHistoria():
 				pass
 			
 			for i in EstruturaF.keys():
-				text.insert(INSERT, str(EstruturaF[i][1]['Nome']) + "\nMedia "+ celula_item +": " + str(mediaN[i][h]) + "\n\n")
+				text.insert(INSERT, i + "\nMedia "+ celula_item +": " + str(mediaN[i][h]) + "\n\n")
 	d.CELULAlimpa()
 
 def filtraGramatica():
@@ -253,7 +253,7 @@ def filtraGramatica():
 	if e.CELULAtual():	
 		for celula_item in e.CELULAtual():
 			for i in EstruturaF.keys():
-				text.insert(INSERT, str(EstruturaF[i][1]['Nome']) + "\nMedia "+ celula_item +": " + str(EstruturaF[i][1]['MediaDasClasses'][celula_item]) + "\n\n")
+				text.insert(INSERT, i + "\nMedia "+ celula_item +": " + str(MediasGramaticas(EstruturaF,i,celula_item)) + "\n\n")
 	e.CELULAlimpa()
 
 def filtraSexo():
@@ -268,7 +268,11 @@ def filtraSexo():
 				pass
 			for i in EstruturaF.keys():
 				if (sexo == EstruturaF[i][1]['Sexo']):
-					text.insert(INSERT, str(EstruturaF[i][1]) + "\nNARRATIVAS: " + str(mediaN[i]) + "\n\n")
+					text.insert(INSERT, 
+					celula_item +"\n"+
+					"Nome: "+ i +"\n" +
+					"Media Geral: " + str(EstruturaF[i][1]['MediaGeralTotal'])+"\n\n"
+					)
 	f.CELULAlimpa()
 
 
@@ -299,11 +303,10 @@ GERAR.add_command(label="Relatório por Grupo", command=filtraGrupo)
 GERAR.add_command(label="Relatório por Idade", command=filtraIdade)
 GERAR.add_command(label="Relatório por História", command=filtraHistoria)
 GERAR.add_command(label="Relatório por Gramática", command=filtraGramatica)
-GERAR.add_command(label="Relatório por Sexo", command=filtraGramatica)
+GERAR.add_command(label="Relatório por Sexo", command=filtraSexo)
 GERAR.add_command(label="Limpa", command=limpa)
 menubar.add_cascade(label="Gerar", menu=GERAR)
-menubar.add_cascade(label="Salvar")
-menubar.add_cascade(label="Salvar", command=limpa)
+
 
 root.config(menu=menubar)
 

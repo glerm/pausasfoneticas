@@ -277,10 +277,10 @@ def EstruturaFiltrada(): #cria uma estrutura em dicionario separadando todas amo
 					cSOMA=(item[classe][0]*item[classe][1])+cSOMA
 					pSOMA=item[classe][0]+pSOMA
 					MediaClasses[classe]=cSOMA/pSOMA
+					dDados['MediaDasClasses']=MediaClasses
 				cSOMA=0.0
 				pSOMA=0.0
 		
-		dDados['MediaDasClasses']=MediaClasses
 		dDados['Sexo']=sexo				
 		dDados['Numero']=numero
 		dDados['Idade']=idade
@@ -292,6 +292,7 @@ def EstruturaFiltrada(): #cria uma estrutura em dicionario separadando todas amo
 		MediaGeralTotal=0.0 #zera para proximo sujeito
 		l=[]#zera para proximo sujeito
 		dDados={}#zera para proximo sujeito
+	dDados['MediaDasClasses']=MediaClasses
 			
 	
 	return d 	

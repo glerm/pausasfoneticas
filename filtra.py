@@ -48,6 +48,16 @@ def MediasTodasNarrativas():
 
 
 	return d
+
+
+def MediasGramaticas(estrutura,nome,classe_gramatical):
+	L=[]
+	for i in range (len(estrutura[nome][0])):
+		if estrutura[nome][0][i][classe_gramatical][1] != 0:
+			L.append(estrutura[nome][0][i][classe_gramatical][1])
+
+	return sum(L)/len(L)
+
 	
 
 ########TESTES DE CONSISTÊNCIA
