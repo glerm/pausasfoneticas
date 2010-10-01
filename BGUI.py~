@@ -51,6 +51,9 @@ todasamostras=["Mecânica1 (A1)","Mecânica1 (A2)","Mecânica1 (A3)","Mecânica2
 def donothing():
 	tkMessageBox.showinfo("Pronto!", "Os relatorios ja foram gerados e estao no diretorio " )
 
+def janeladeaviso(texto):
+	tkMessageBox.showinfo("Pronto!",texto)
+
 ######################### listas teste
 
 sujeitos=["Brenda","Felipe Moreno","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina"]
@@ -183,6 +186,51 @@ from filtra import *
 
 mediaN=MediasTodasNarrativas()
 
+###### funções para converter tags para nome expandido - exemplo: de P para Pesquisa de F para feminino
+def expandeGrupo(tag):
+	t=''
+	if tag == 'P':
+		t='Pesquisa'
+	if tag == 'C':
+		t='Controle'
+	return t
+
+def expandeSexo(tag):
+	t=''
+	if tag == 'M':
+		t='Masculino'
+	if tag == 'C':
+		t='Feminino'
+	return t
+
+def expandeIdade(tag):
+	t=''
+	t1=tag.split('a')
+	t2=t1[1].split('m')
+	if t2[0] != '':
+		t=t1[0]+" Anos e "+t2[0]+" Meses"
+	else:
+		t=t1[0]+" Anos"
+
+	return t
+
+def expandeHistoria(tag):
+	if celula_item == u'Mecânica1':
+		h='M1'
+	if celula_item == u'Mecânica2':
+		h='M2'
+	if celula_item == u'Comportamental1':
+		h='C1'
+	if celula_item == u'Comportamental2':
+		h='C2'
+	if celula_item == u'Intencional':
+		h='I1'
+	return t
+		
+
+
+
+
 def filtraSujeito():
 	text.delete(0.0,END)
 	if a.CELULAtual():
@@ -229,6 +277,25 @@ def filtraIdade():
 
 def filtraHistoria():
 	text.delete(0.0,END)
+	if d.CELULAtual():
+		for i in EstruturaF.keys():
+			text.insert(INSERT, "Nome: "+ i + "\n------------------\n")
+			for celula_item in d.CELULAtual():
+				if celula_item == u'Mecânica1':
+					h='M1'
+				if celula_item == u'Mecânica2':
+					h='M2'
+				if celula_item == u'Comportamental1':
+					h='C1'
+				if celula_item == u'Comportamental2':
+					h='C2'
+				if celula_item == u'Intencional':
+					h='I1'
+				text.insert(INSERT, "Media "+ celula_item +": " + str(mediaN[i][h]) + "\n")
+	d.CELULAlimpa()
+
+def filtraHistoriaVELHO():
+	text.delete(0.0,END)
 	if d.CELULAtual():	
 		for celula_item in d.CELULAtual():
 			if celula_item == u'Mecânica1':
@@ -248,12 +315,28 @@ def filtraHistoria():
 				text.insert(INSERT, i + "\nMedia "+ celula_item +": " + str(mediaN[i][h]) + "\n\n")
 	d.CELULAlimpa()
 
-def filtraGramatica():
+
+
+
+
+
+
+def filtraGramaticaVELHO():
 	text.delete(0.0,END)
 	if e.CELULAtual():	
 		for celula_item in e.CELULAtual():
 			for i in EstruturaF.keys():
 				text.insert(INSERT, i + "\nMedia "+ celula_item +": " + str(MediasGramaticas(EstruturaF,i,celula_item)) + "\n\n")
+	e.CELULAlimpa()
+
+def filtraGramatica():
+	text.delete(0.0,END)
+	if e.CELULAtual():
+		for i in EstruturaF.keys():
+			text.insert(INSERT, "Nome:"+ i + "\n"+"----------------\n")
+			for celula_item in e.CELULAtual():
+				text.insert(INSERT, "Media "+ celula_item +": " + str(MediasGramaticas(EstruturaF,i,celula_item)) + "\n")
+			text.insert(INSERT, "\n")
 	e.CELULAlimpa()
 
 def filtraSexo():
@@ -269,21 +352,38 @@ def filtraSexo():
 			for i in EstruturaF.keys():
 				if (sexo == EstruturaF[i][1]['Sexo']):
 					text.insert(INSERT, 
-					celula_item +"\n"+
+					celula_item +"\n----------------\n"+
 					"Nome: "+ i +"\n" +
+					"Idade: "+ expandeIdade(EstruturaF[i][1]['Idade']) + "\n"+
+					"Grupo: "+ expandeGrupo(EstruturaF[i][1]['Grupo']) + "\n" +
 					"Media Geral: " + str(EstruturaF[i][1]['MediaGeralTotal'])+"\n\n"
 					)
 	f.CELULAlimpa()
 
-
-
-
-
-
-
-
-
-
+################# CSV
+def CSVfiltraSexo():
+	text.delete(0.0,END)
+	csv="Nome,Idade,Grupo,\"Media Geral\"\n"
+	if f.CELULAtual():
+		for celula_item in f.CELULAtual():
+			if celula_item == 'masculino':
+				sexo='M'
+			if celula_item == 'feminino':
+				sexo='F'	
+			else:
+				pass
+			for i in EstruturaF.keys():
+				if (sexo == EstruturaF[i][1]['Sexo']):
+					csv=csv+str("\""+i +"\""+","+ "\""+expandeIdade(EstruturaF[i][1]['Idade'])+"\""+ ","
+					+expandeGrupo(EstruturaF[i][1]['Grupo']) + "," +
+					str(EstruturaF[i][1]['MediaGeralTotal'])+"\n"
+					)
+	msg="Gravado arquivo PAUSASporSexo.csv"
+	text.insert(INSERT, msg)
+	dados=open('PAUSAS.csv','w')
+	dados.write(csv)
+	janeladeaviso(msg)
+	f.CELULAlimpa()
 
 
 
@@ -306,6 +406,28 @@ GERAR.add_command(label="Relatório por Gramática", command=filtraGramatica)
 GERAR.add_command(label="Relatório por Sexo", command=filtraSexo)
 GERAR.add_command(label="Limpa", command=limpa)
 menubar.add_cascade(label="Gerar", menu=GERAR)
+
+SALVAR = Menu(menubar, font=("Arial",20),activebackground="yellow", tearoff=0)
+SALVAR.add_command(label="Relatório por Sujeito", command=filtraSujeito)
+SALVAR.add_command(label="Relatório por Grupo", command=filtraGrupo)
+SALVAR.add_command(label="Relatório por Idade", command=filtraIdade)
+SALVAR.add_command(label="Relatório por História", command=filtraHistoria)
+SALVAR.add_command(label="Relatório por Gramática", command=filtraGramatica)
+SALVAR.add_command(label="Relatório por Sexo", command=CSVfiltraSexo)
+SALVAR.add_command(label="Limpa", command=limpa)
+menubar.add_cascade(label="Salvar", menu=SALVAR)
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 root.config(menu=menubar)
