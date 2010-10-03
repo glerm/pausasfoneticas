@@ -1,4 +1,5 @@
-# coding: utf-8
+# -*- coding: utf-8 -*-
+
 
 from Tkinter import *
 import tkMessageBox
@@ -6,6 +7,10 @@ import Tkinter, tkFileDialog
 import tkMessageBox
 import os
 import ScrolledText
+import codecs
+import locale
+anguage, output_encoding = locale.getdefaultlocale()
+
 #from data import *
 
 
@@ -61,7 +66,7 @@ grupos=["Pesquisa","Controle"]
 idade=["7 anos","8 anos","9 anos","10 anos"] 
 historia=[u'Mecânica1',u'Mecânica2',"Comportamental1","Comportamental2","Intencional"]
 gramatica=["substantivo","verbo","adjetivo",u'conjunção',u'preposição',u'pronome']
-sexo=["masculino","feminino"]
+sexo=["Masculino","Feminino"]
 ##############################
 
 ########### cores das celulas
@@ -186,7 +191,7 @@ from filtra import *
 
 mediaN=MediasTodasNarrativas()
 
-###### funções para converter tags para nome expandido - exemplo: de P para Pesquisa de F para feminino
+###### funções para converter tags para nome expandido - exemplo: de P para Pesquisa de F para Feminino
 def expandeGrupo(tag):
 	t=''
 	if tag == 'P':
@@ -256,9 +261,10 @@ def filtraGrupo():
 	b.CELULAlimpa()
 
 
+
 def filtraIdade():
 	text.delete(0.0,END)
-	if c.CELULAtual():	
+	if c.CELULAtual():
 		for celula_item in c.CELULAtual():
 			if celula_item == '7 anos':
 				idade='7'
@@ -267,12 +273,18 @@ def filtraIdade():
 			if celula_item == '9 anos':
 				idade='9'
 			if celula_item == '10 anos':
-				idade='10'
+				idade='10'	
 			else:
 				pass
 			for i in EstruturaF.keys():
-				if (idade == ((EstruturaF[i][1]['Idade']).split('a'))[0]): #so a idade em anos corta depois do a
-					text.insert(INSERT, str(EstruturaF[i][1]) + "\nNARRATIVAS: " + str(mediaN[i]) + "\n\n")
+				if (idade == ((EstruturaF[i][1]['Idade']).split('a'))[0]): #so a idade em anos corta depois
+					text.insert(INSERT, 
+					celula_item +"\n----------------\n"+
+					"Nome: "+ i +"\n" +
+					"Idade: "+ expandeIdade(EstruturaF[i][1]['Idade']) + "\n"+
+					"Grupo: "+ expandeGrupo(EstruturaF[i][1]['Grupo']) + "\n" +
+					"Media Geral: " + str(EstruturaF[i][1]['MediaGeralTotal'])+"\n\n"
+					)
 	c.CELULAlimpa()
 
 def filtraHistoria():
@@ -296,13 +308,6 @@ def filtraHistoria():
 	d.CELULAlimpa()
 
 
-def filtraGramaticaVELHO():
-	text.delete(0.0,END)
-	if e.CELULAtual():	
-		for celula_item in e.CELULAtual():
-			for i in EstruturaF.keys():
-				text.insert(INSERT, i + "\nMedia "+ celula_item +": " + str(MediasGramaticas(EstruturaF,i,celula_item)) + "\n\n")
-	e.CELULAlimpa()
 
 def filtraGramatica():
 	text.delete(0.0,END)
@@ -318,9 +323,9 @@ def filtraSexo():
 	text.delete(0.0,END)
 	if f.CELULAtual():
 		for celula_item in f.CELULAtual():
-			if celula_item == 'masculino':
+			if celula_item == 'Masculino':
 				sexo='M'
-			if celula_item == 'feminino':
+			if celula_item == 'Feminino':
 				sexo='F'	
 			else:
 				pass
@@ -341,9 +346,9 @@ def CSVfiltraSexo():
 	csv="Nome,Idade,Grupo,\"Media Geral\"\n"
 	if f.CELULAtual():
 		for celula_item in f.CELULAtual():
-			if celula_item == 'masculino':
+			if celula_item == 'Masculino':
 				sexo='M'
-			if celula_item == 'feminino':
+			if celula_item == 'Feminino':
 				sexo='F'	
 			else:
 				pass
@@ -355,10 +360,34 @@ def CSVfiltraSexo():
 					)
 	msg="Gravado arquivo PAUSASporSexo.csv"
 	text.insert(INSERT, msg)
-	dados=open('PAUSAS.csv','w')
+	dados=open('PAUSASporSexo.csv','w')
 	dados.write(csv)
 	janeladeaviso(msg)
 	f.CELULAlimpa()
+
+def CSVfiltraGramatica():
+	text.delete(0.0,END)
+	if e.CELULAtual():
+		for i in EstruturaF.keys():
+			csv=u'Nome,'+"\""+ i +"\""+"\n"
+			for celula_item in e.CELULAtual():
+				csv=csv+celula_item+","+ str(MediasGramaticas(EstruturaF,i,celula_item)) +"\n"
+			csv=csv+"\n"
+	csv.encode('utf-8')
+	print csv
+	msg="Gravado arquivo PAUSASGramatica.csv"
+	text.insert(INSERT, msg)
+	dados=open('PAUSASGramatica.csv','w')
+	dados.write(csv)
+	dados.close()
+	janeladeaviso(msg)
+	e.CELULAlimpa()
+
+
+
+
+
+
 
 
 
@@ -387,20 +416,10 @@ SALVAR.add_command(label="Relatório por Sujeito", command=filtraSujeito)
 SALVAR.add_command(label="Relatório por Grupo", command=filtraGrupo)
 SALVAR.add_command(label="Relatório por Idade", command=filtraIdade)
 SALVAR.add_command(label="Relatório por História", command=filtraHistoria)
-SALVAR.add_command(label="Relatório por Gramática", command=filtraGramatica)
+SALVAR.add_command(label="Relatório por Gramática", command=CSVfiltraGramatica)
 SALVAR.add_command(label="Relatório por Sexo", command=CSVfiltraSexo)
 SALVAR.add_command(label="Limpa", command=limpa)
 menubar.add_cascade(label="Salvar", menu=SALVAR)
-
-
-
-
-
-
-
-
-
-
 
 
 
