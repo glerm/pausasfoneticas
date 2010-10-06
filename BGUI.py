@@ -222,17 +222,18 @@ def expandeIdade(tag):
 	return t
 
 def expandeHistoria(tag):
-	if celula_item == u'Mecânica1':
-		h='M1'
-	if celula_item == u'Mecânica2':
-		h='M2'
-	if celula_item == u'Comportamental1':
-		h='C1'
-	if celula_item == u'Comportamental2':
-		h='C2'
-	if celula_item == u'Intencional':
-		h='I1'
-	return t
+	h=''
+	if tag == u'M1':
+		h=u'Mecânica1'
+	if tag == u'M2':
+		h=u'Mecânica2'
+	if tag == u'C1':
+		h=u'Comportamental1'
+	if tag == u'C2':
+		h=u'Comportamental2'
+	if tag == u'I1':
+		h=u'Intencional'
+	return h
 		
 
 
@@ -249,8 +250,14 @@ def filtraSujeito():
 					"Idade: "+ expandeIdade(EstruturaF[i][1]['Idade']) + "\n"+
 					"Sexo: "+ expandeSexo(EstruturaF[i][1]['Sexo']) + "\n"+
 					"Grupo: "+ expandeGrupo(EstruturaF[i][1]['Grupo']) + "\n" +
-					"Media Geral: " + str(EstruturaF[i][1]['MediaGeralTotal'])+"\n\n"
+					"Media Geral: " + str(EstruturaF[i][1]['MediaGeralTotal'])+"\n"
 					)
+					for k in EstruturaF[i][0]:
+						text.insert (INSERT, "Media "+ k['Amostra'] + " " + expandeHistoria(k['Narrativa'])+": " + str(k['MediaGeral'])+ "\n")
+			text.insert(INSERT,"\n")
+
+
+
 	a.CELULAlimpa()
 
 
