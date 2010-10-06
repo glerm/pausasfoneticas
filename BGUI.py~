@@ -11,8 +11,6 @@ import codecs
 import locale
 language, output_encoding = locale.getdefaultlocale()
 
-import barra
-
 #from data import *
 
 

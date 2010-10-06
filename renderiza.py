@@ -226,7 +226,9 @@ def renderiza():
 	renderizado=[]
 	todos=abretudo()
 	for i in todos:
+		print "Renderizando arquivo: " + str(i)
 		renderizado.append(estrutura(i))
+		print "-----------------------------→ OK!"
 	return renderizado
 
 def DATAFILErenderiza():
@@ -287,12 +289,12 @@ def EstruturaFiltrada(): #cria uma estrutura em dicionario separadando todas amo
 		dDados['Grupo']=grupo
 		dDados['MediaGeralTotal']=MediaGeralTotal/15
 		d[i]=(l,dDados) # par (listadeamostras,ficha)
-		MediaClasses[classe]=0.0
+		#MediaClasses[classe]=0.0
 		
 		MediaGeralTotal=0.0 #zera para proximo sujeito
 		l=[]#zera para proximo sujeito
 		dDados={}#zera para proximo sujeito
-	dDados['MediaDasClasses']=MediaClasses
+	#dDados['MediaDasClasses']=MediaClasses
 			
 	
 	return d 	
@@ -302,3 +304,12 @@ def DATAFILE2renderiza():
 	x='EstruturaF='+str(EstruturaFiltrada())
 	dados=open('data2.py','w')
 	dados.write(x)
+
+
+
+if __name__ == '__main__':
+	DATAFILErenderiza()
+	DATAFILE2renderiza()
+	print "***************Gerados dicionários base."
+
+
