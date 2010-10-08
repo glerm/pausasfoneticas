@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-
+from filtra import *
 from Tkinter import *
 import tkMessageBox
 import Tkinter, tkFileDialog
@@ -63,7 +63,12 @@ def janeladeaviso(texto):
 
 ######################### listas teste
 
-sujeitos=["Brenda","Felipe Moreno","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina"]
+sujeitos=[]
+
+for i in EstruturaF.keys():
+	sujeitos.append(i)
+
+#sujeitos=["Brenda","Felipe Moreno","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina"]
 grupos=["Pesquisa","Controle"]
 idade=["7 anos","8 anos","9 anos","10 anos"] 
 historia=[u'Mecânica1',u'Mecânica2',"Comportamental1","Comportamental2","Intencional"]
@@ -189,7 +194,7 @@ atual=[a.CELULAtual(),b.CELULAtual(),c.CELULAtual(),d.CELULAtual(),e.CELULAtual(
 
 
 
-from filtra import *
+
 
 mediaN=MediasTodasNarrativas()
 
@@ -224,20 +229,35 @@ def expandeIdade(tag):
 def expandeHistoria(tag):
 	h=''
 	if tag == u'M1':
-		h='Mecânica1'
+		h=u'Mecânica1'
 	if tag == u'M2':
-		h='Mecânica2'
+		h=u'Mecânica2'
 	if tag == u'C1':
-		h='Comportamental1'
+		h=u'Comportamental1'
 	if tag == u'C2':
-		h='Comportamental2'
+		h=u'Comportamental2'
 	if tag == u'I1':
-		h='Intencional'
+		h=u'Intencional'
 	return h
 		
 
+def ordena_amostras(nome):
+	a=[]
+	
+	for k in EstruturaF[nome][0]:
+		a.append(("Media "+ expandeHistoria(k['Narrativa'])+ " " + k['Amostra'] , k['MediaGeral']))
+
+	a.sort()
+	
+	return a
 
 
+ordem_amostras=u'\"Media Comportamental1 A1\",\"Media Comportamental1 A2\",\"Media Comportamental1 A3\",\"Media Comportamental2 A1\",\"Media Comportamental2 A2\",\"Media Comportamental2 A3\",\"Media Intencional A1\",\"Media Intencional A2\",\"Media Intencional A3\",\"Media Mec\xe2nica1 A1\",\"Media Mec\xe2nica1 A2\",\"Media Mec\xe2nica1 A3\",\"Media Mec\xe2nica2 A1\",\"Media Mec\xe2nica2 A2\",\"Media Mec\xe2nica2 A3\"'
+
+
+
+
+############ filtros do clipboard
 
 def filtraSujeito():
 	text.delete(0.0,END)
@@ -252,8 +272,9 @@ def filtraSujeito():
 					"Grupo: "+ expandeGrupo(EstruturaF[i][1]['Grupo']) + "\n" +
 					"Media Geral: " + str(EstruturaF[i][1]['MediaGeralTotal'])+"\n"
 					)
-					for k in EstruturaF[i][0]:
-						text.insert (INSERT, "Media "+ k['Amostra'] + " " + expandeHistoria(k['Narrativa'])+": " + str(k['MediaGeral'])+ "\n")
+					o=ordena_amostras(i)
+					for k in o:
+						text.insert (INSERT, k[0] + " " + str(k[1]) + "\n")
 			text.insert(INSERT,"\n")
 
 
@@ -368,13 +389,19 @@ def filtraSexo():
 
 def CSVfiltraSujeito():
 	text.delete(0.0,END)
-	csv="Nome,Idade,Grupo,Sexo,\"Media Geral\"\n"
+	csv="Nome,Idade,Grupo,Sexo,\"Media Geral\""+ordem_amostras+"\n"
 	if a.CELULAtual():
 		for celula_item in a.CELULAtual():
 			for i in EstruturaF.keys():
 				if (celula_item == i): 
-					csv=csv+ str("\""+i +"\""+","+ "\""+expandeIdade(EstruturaF[i][1]['Idade'])+"\""+ ","+expandeGrupo(EstruturaF[i][1]['Grupo']) + "," + expandeSexo(EstruturaF[i][1]['Sexo']) + "," + str(EstruturaF[i][1]['MediaGeralTotal'])+ "\n")
+					csv=csv+ str("\""+i +"\""+","+ "\""+expandeIdade(EstruturaF[i][1]['Idade'])+"\""+ ","+expandeGrupo(EstruturaF[i][1]['Grupo']) + "," + expandeSexo(EstruturaF[i][1]['Sexo']) + "," + str(EstruturaF[i][1]['MediaGeralTotal']))
+
+					o=ordena_amostras(i)
+					for k in o:
+						csv=csv+","+str(k[1])
+			csv=csv+"\n"
 	
+	csv=csv.encode('utf-8')
 	msg="Gravado arquivo PAUSASporSujeito.csv"
 	text.insert(INSERT, msg)
 	dados=open('PAUSASporSujeito.csv','w')
@@ -398,6 +425,8 @@ def CSVfiltraGrupo():
 				if (grupo == (EstruturaF[i][1]['Grupo'])): 
 					csv=csv+str("\""+i +"\""+","+ "\""+expandeIdade(EstruturaF[i][1]['Idade'])+"\""+ ","
 					+expandeGrupo(EstruturaF[i][1]['Grupo']) + "," + expandeSexo(EstruturaF[i][1]['Sexo']) + "," +str(EstruturaF[i][1]['MediaGeralTotal'])+ "\n")
+
+	csv=csv.encode('utf-8')
 	msg="Gravado arquivo PAUSASporGrupo.csv"
 	text.insert(INSERT, msg)
 	dados=open('PAUSASporGrupo.csv','w')
@@ -425,6 +454,8 @@ def CSVfiltraIdade():
 				if (idade == ((EstruturaF[i][1]['Idade']).split('a'))[0]): #so a idade em anos corta depois
 					csv=csv+str("\""+i +"\""+","+ "\""+expandeIdade(EstruturaF[i][1]['Idade'])+"\""+ ","
 					+expandeGrupo(EstruturaF[i][1]['Grupo']) + "," + expandeSexo(EstruturaF[i][1]['Sexo']) + "," +str(EstruturaF[i][1]['MediaGeralTotal'])+ "\n")
+
+	csv=csv.encode('utf-8')
 	msg="Gravado arquivo PAUSASporIdade.csv"
 	text.insert(INSERT, msg)
 	dados=open('PAUSASporIdade.csv','w')
@@ -453,8 +484,7 @@ def CSVfiltraHistoria():
 				csv=csv+celula_item +"," + str(mediaN[i][h]) + "\n"
 			csv=csv+"\n"
 		
-	csv.encode('utf-8')
-	print csv
+	csv=csv.encode('utf-8')
 	msg="Gravado arquivo PAUSASHistoria.csv"
 	text.insert(INSERT, msg)
 	dados=open('PAUSASHistoria.csv','w')
@@ -472,8 +502,8 @@ def CSVfiltraGramatica():
 			for celula_item in e.CELULAtual():
 				csv=csv+celula_item+","+ str(MediasGramaticas(EstruturaF,i,celula_item)) +"\n"
 			csv=csv+"\n"
-	csv.encode('utf-8')
-	print csv
+
+	csv=csv.encode('utf-8')
 	msg="Gravado arquivo PAUSASGramatica.csv"
 	text.insert(INSERT, msg)
 	dados=open('PAUSASGramatica.csv','w')
@@ -500,6 +530,8 @@ def CSVfiltraSexo():
 					+expandeGrupo(EstruturaF[i][1]['Grupo']) + "," + celula_item + "," +
 					str(EstruturaF[i][1]['MediaGeralTotal'])+ "\n"
 					)
+
+	csv=csv.encode('utf-8')
 	msg="Gravado arquivo PAUSASporSexo.csv"
 	text.insert(INSERT, msg)
 	dados=open('PAUSASporSexo.csv','w')
@@ -553,8 +585,8 @@ Tscroll.grid(row=3,column=0,sticky=N+S+E,ipadx="7")
 
 
 text = Text(root,wrap=WORD,yscrollcommand=Tscroll.set, width="100",height="18",bd=5,font=("Arial",12))
-text.insert(INSERT, atual)
-#text.insert(END, "Insere no final")
+#text.insert(INSERT, atual)
+#text.delete(0.0,END) #limpa
 
 Tscroll.config(command=text.yview) #ativa o scroll dentro do texto
 text.grid(row=3,column=1,columnspan=6,sticky=N+W,)
