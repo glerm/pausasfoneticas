@@ -9,6 +9,7 @@ import os
 import ScrolledText
 import codecs
 import locale
+import os
 language, output_encoding = locale.getdefaultlocale()
 
 import barra
@@ -546,6 +547,20 @@ def limpa():
 	global text
 	text.delete(0.0,END)
 
+def rendershell():
+	c = Toplevel(root)
+	c.title("Renderização")
+	c.geometry('320x240+230+130')
+	t = Text(c,foreground="orange",background="black")
+	t.pack()
+	c.focus_set()
+	#p = os.popen("find . -name '*.py'", 'r')
+	p = os.popen("python renderiza.py", 'r')
+	for l in p.xreadlines():
+		t.insert(END, '%s\n' % l.rstrip())
+		t.see(END)
+		t.update_idletasks()
+
 
 ################### MENU
 
@@ -571,6 +586,10 @@ SALVAR.add_command(label="Relatório por Sexo", command=CSVfiltraSexo)
 SALVAR.add_command(label="Limpa", command=limpa)
 menubar.add_cascade(label="Salvar", menu=SALVAR)
 
+RENDER = Menu(menubar, font=("Arial",20),activebackground="red", tearoff=0)
+RENDER.add_command(label="Nova Renderização", command=rendershell)
+menubar.add_cascade(label="R​enderiza", menu=RENDER)
+
 
 
 
@@ -591,6 +610,13 @@ text = Text(root,wrap=WORD,yscrollcommand=Tscroll.set, width="100",height="18",b
 Tscroll.config(command=text.yview) #ativa o scroll dentro do texto
 text.grid(row=3,column=1,columnspan=6,sticky=N+W,)
 
+
+
+
+
+
+
+root.mainloop()
 
 
 

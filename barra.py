@@ -78,17 +78,17 @@ class Meter(Tkinter.Frame):
 def configura(meter, value):
     meter.set(value)
     if value < 1.0:
-
+	value = value + 0.005
         meter.after(50, lambda: configura(meter, value))
     else:
         meter.set(value, 'Convertido com sucesso')
 
-def GUIrenderiza():
+def GUIrenderiza(m):
     root = Tkinter.Tk(className='Formatando Arquivos')
     m = Meter(root, relief='ridge', bd=3)
     m.pack(fill='x')
     m.set(0.0, 'Iniciando conversão...')
-    m.after(1000, lambda: configura(m, 0.0))
+    m.after(1000, m)
     root.mainloop()
 
 
