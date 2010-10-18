@@ -205,9 +205,8 @@ def estrutura (arq): #inserir a contrução da tag aqui dentro mesmo? ele nao pr
 
 ################# abrindo e escrevendo o dicionario
 
-homedir = os.path.expanduser('~')
+from configs import * #ROOTpath e outros
 
-ROOTpath = homedir+'/fonoaudiologia/novas_amostras/'
 
 #retorna todos diretorios dentro de um diretorio numa lista 
 def sujeitos(): 
@@ -228,7 +227,7 @@ def renderiza():
 	for i in todos:
 		print "Renderizando arquivo: " + str(i)
 		renderizado.append(estrutura(i))
-		print "Ok."
+		print "-----------------------------→ OK!"
 	return renderizado
 
 def DATAFILErenderiza():

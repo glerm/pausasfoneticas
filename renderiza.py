@@ -205,9 +205,8 @@ def estrutura (arq): #inserir a contrução da tag aqui dentro mesmo? ele nao pr
 
 ################# abrindo e escrevendo o dicionario
 
-homedir = os.path.expanduser('~')
+from configs import * #ROOTpath e outros
 
-ROOTpath = homedir+'/fonoaudiologia/novas_amostras/'
 
 #retorna todos diretorios dentro de um diretorio numa lista 
 def sujeitos(): 
@@ -233,7 +232,7 @@ def renderiza():
 
 def DATAFILErenderiza():
 	x='Estrutura='+str(renderiza())
-	dados=open('data.py','w')
+	dados=open(PYPATH+'data.py','w')
 	dados.write(x)
 
 
@@ -302,7 +301,7 @@ def EstruturaFiltrada(): #cria uma estrutura em dicionario separadando todas amo
 
 def DATAFILE2renderiza():
 	x='EstruturaF='+str(EstruturaFiltrada())
-	dados=open('data2.py','w')
+	dados=open(PYPATH+'data2.py','w')
 	dados.write(x)
 
 
