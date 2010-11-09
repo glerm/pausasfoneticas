@@ -89,5 +89,3 @@ def ChecarErrosAmostras(): #compara padroes dos lotes de arquivo (testar a neces
 
 
 
-		
-

@@ -1,7 +1,6 @@
-#! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from filtra import *
+
 from Tkinter import *
 import tkMessageBox
 import Tkinter, tkFileDialog
@@ -13,25 +12,21 @@ import locale
 import os
 language, output_encoding = locale.getdefaultlocale()
 
-from configs import * #ROOTpath e outros
+#importa a estrutura filtrada original
+from filtra_estrutura import *
+
+
 
 homedir = os.path.expanduser('~') 
 
 root = Tk()
 root.title("Tipos de Relatório")
-
-#
 w, h = root.winfo_screenwidth(), root.winfo_screenheight()
-#
 
-#
 root.geometry("%dx%d+0+0" % (w, h))
 
 
 ######## funcoes globais
-
-
-
 
 def donothing():
 	tkMessageBox.showinfo("Pronto!", "Os relatorios ja foram gerados e estao no diretorio " )
@@ -381,7 +376,7 @@ def CSVfiltraSujeito():
 	csv=csv.encode('utf-8')
 	msg="Gravado arquivo PAUSASporSujeito.csv"
 	text.insert(INSERT, msg)
-	dados=open(CSVpath+'PAUSASporSujeito.csv','w')
+	dados=open('PAUSASporSujeito.csv','w')
 	dados.write(csv)
 	janeladeaviso(msg)
 	a.CELULAlimpa()
@@ -406,7 +401,7 @@ def CSVfiltraGrupo():
 	csv=csv.encode('utf-8')
 	msg="Gravado arquivo PAUSASporGrupo.csv"
 	text.insert(INSERT, msg)
-	dados=open(CSVpath+'PAUSASporGrupo.csv','w')
+	dados=open('PAUSASporGrupo.csv','w')
 	dados.write(csv)
 	janeladeaviso(msg)
 	b.CELULAlimpa()
@@ -435,7 +430,7 @@ def CSVfiltraIdade():
 	csv=csv.encode('utf-8')
 	msg="Gravado arquivo PAUSASporIdade.csv"
 	text.insert(INSERT, msg)
-	dados=open(CSVpath+'PAUSASporIdade.csv','w')
+	dados=open('PAUSASporIdade.csv','w')
 	dados.write(csv)
 	janeladeaviso(msg)
 	c.CELULAlimpa()
@@ -464,7 +459,7 @@ def CSVfiltraHistoria():
 	csv=csv.encode('utf-8')
 	msg="Gravado arquivo PAUSASHistoria.csv"
 	text.insert(INSERT, msg)
-	dados=open(CSVpath+'PAUSASHistoria.csv','w')
+	dados=open('PAUSASHistoria.csv','w')
 	dados.write(csv)
 	dados.close()
 	janeladeaviso(msg)
@@ -483,7 +478,7 @@ def CSVfiltraGramatica():
 	csv=csv.encode('utf-8')
 	msg="Gravado arquivo PAUSASGramatica.csv"
 	text.insert(INSERT, msg)
-	dados=open(CSVpath+'PAUSASGramatica.csv','w')
+	dados=open('PAUSASGramatica.csv','w')
 	dados.write(csv)
 	dados.close()
 	janeladeaviso(msg)
@@ -511,7 +506,7 @@ def CSVfiltraSexo():
 	csv=csv.encode('utf-8')
 	msg="Gravado arquivo PAUSASporSexo.csv"
 	text.insert(INSERT, msg)
-	dados=open(CSVpath+'PAUSASporSexo.csv','w')
+	dados=open('PAUSASporSexo.csv','w')
 	dados.write(csv)
 	janeladeaviso(msg)
 	f.CELULAlimpa()
@@ -523,19 +518,66 @@ def limpa():
 	global text
 	text.delete(0.0,END)
 
+
+
+
 def rendershell():
 	c = Toplevel(root)
 	c.title("Renderização")
-	c.geometry('320x240+230+130')
+	c.geometry('500x400+230+130')
 	t = Text(c,foreground="orange",background="black")
 	t.pack()
-	c.focus_set()
-	#p = os.popen("find . -name '*.py'", 'r')
-	p = os.popen("python"+PYPATH+"renderiza.py", 'r')
-	for l in p.xreadlines():
-		t.insert(END, '%s\n' % l.rstrip())
+	c.tk.call('update')
+	renderizado=[]
+	todos=abretudo()
+	if not todos[0]:
+		t.insert(END,"\nERRO!!\nExistem arquivos faltantes ou repetidos nas pastas: \n")
+		t.tk.call('update')
+		for folder_nome in todos[1]:
+			t.insert(END,folder_nome +"\n")
+			t.tk.call('update')
 		t.see(END)
-		t.update_idletasks()
+		c.tk.call('update')
+		c.focus_set()
+	else:
+			
+		erros=[]
+		for i in todos[1]:
+			try:
+				t.insert(END, "\n\nRenderizando arquivo: "+ str(i))
+				t.tk.call('update')
+				renderizado.append(estrutura(i))
+				t.insert(END,"\n+++++++ OK!")
+				t.tk.call('update')
+				t.see(END)
+			except KeyError:
+				erros.append(str(i))
+				t.insert(END, "\n~~~~~ERRO!!!! ")
+				t.tk.call('update')
+				t.see(END)
+				
+		if not erros:
+			x='Estrutura='+str(renderizado)
+			dados=open(PYPATH+'data.py','w')
+			dados.write(x)
+			t.insert(END, "\n\nRenderização bem sucedida! - Reinicie o Programa.\n")
+			t.tk.call('update')
+			t.see(END)
+		else:
+			t.insert(END, "\n\nEncontrados erros nos seguintes arquivos:\n")
+			t.tk.call('update')
+			for erro in erros:
+				t.insert(END, erro +"\n")
+				t.tk.call('update')
+			t.insert(END, "\nConserte os arquivos ou retire sua pasta da 	renderização.")
+			t.tk.call('update')
+			t.see(END)
+		c.tk.call('update')
+		c.focus_set()
+
+
+
+
 
 
 ################### MENU

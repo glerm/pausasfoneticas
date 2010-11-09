@@ -221,19 +221,39 @@ def abretudo(): #lista com todos paths de arquivo
 	
 	return tudo
 
+
 def renderiza():
 	renderizado=[]
 	todos=abretudo()
+	erros=[]
 	for i in todos:
-		print "Renderizando arquivo: " + str(i)
-		renderizado.append(estrutura(i))
-		print "-----------------------------→ OK!"
-	return renderizado
+		try:
+			print "Renderizando arquivo: " + str(i)
+			renderizado.append(estrutura(i))
+			print "-----------------------------→ OK!"
+		except KeyError:
+			erros.append(os.path.split(str(i))[1])
+			print "Erro no arquivo "+ os.path.split(str(i))[1]
+			
+	if not erros:
+		return (True,renderizado)
+	else:
+		return (False, erros)
+
+
+
+
 
 def DATAFILErenderiza():
-	x='Estrutura='+str(renderiza())
-	dados=open('data.py','w')
-	dados.write(x)
+	amostra_renderizada=renderiza()
+	if amostra_renderizada[0]:
+		x='Estrutura='+str(amostra_renderizada[1])
+		dados=open(PYPATH+'data.py','w')
+		dados.write(x)
+		return True
+	else:
+		print 'Erros nas fichas dos arquivos: '+str(amostra_renderizada[1])
+		return False
 
 
 from data import *
@@ -301,14 +321,18 @@ def EstruturaFiltrada(): #cria uma estrutura em dicionario separadando todas amo
 
 def DATAFILE2renderiza():
 	x='EstruturaF='+str(EstruturaFiltrada())
-	dados=open('data2.py','w')
+	dados=open(PYPATH+'data2.py','w')
 	dados.write(x)
 
+def rendertudo():
+	if DATAFILErenderiza():
+		DATAFILE2renderiza()
+		print "***************Gerados novos dicionários base."
+	else:
+		print "***************Cheque os arquivos citados ou elimine a pasta destes da renderização."
+		
 
 
 if __name__ == '__main__':
-	DATAFILErenderiza()
-	DATAFILE2renderiza()
-	print "***************Gerados dicionários base."
-
+	rendertudo()
 

@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-#arquivo teste:
-#arq='teste.aup'
 
 from BeautifulSoup import BeautifulSoup
 import string
@@ -70,8 +68,6 @@ def tag(arq): #recebe arquivo, extrai a sopa XML tag deste e retorna dicionario
 		d.pop('GENRE')
 	if d.has_key(u'G\xeanero'):
 		d['Sexo']=d.pop(u'G\xeanero') #elimina possibilidade de erro na chave(fazer tambem com acentos e minusculas)
-
-
 	return d
 
 
@@ -215,124 +211,18 @@ def sujeitos():
 
 def abretudo(): #lista com todos paths de arquivo
 	tudo=[]
+	folder_erro=[]
+	todos_no_folder=0
 	for i in sujeitos():
 		for infile in glob.glob( os.path.join(i, '*.aup')):
+			todos_no_folder=todos_no_folder+1
 			tudo.append(infile)
-	
-	return tudo
-
-
-def renderiza():
-	renderizado=[]
-	todos=abretudo()
-	erros=[]
-	for i in todos:
-		try:
-			print "Renderizando arquivo: " + str(i)
-			renderizado.append(estrutura(i))
-			print "-----------------------------→ OK!"
-		except KeyError:
-			erros.append(os.path.split(str(i))[1])
-			print "Erro no arquivo "+ os.path.split(str(i))[1]
-			
-	if not erros:
-		return (True,renderizado)
+		if todos_no_folder != 15:
+			folder_erro.append(i)
+		todos_no_folder=0
+	if folder_erro:
+		return (False,folder_erro)
 	else:
-		return (False, erros)
+		return (True,tudo)
 
-
-
-
-
-def DATAFILErenderiza():
-	amostra_renderizada=renderiza()
-	if amostra_renderizada[0]:
-		x='Estrutura='+str(amostra_renderizada[1])
-		dados=open(PYPATH+'data.py','w')
-		dados.write(x)
-		return True
-	else:
-		print 'Erros nas fichas dos arquivos: '+str(amostra_renderizada[1])
-		return False
-
-
-from data import *
-
-def Nomes():
-	nomes=list(set([(i['Nome']) for i in Estrutura]))
-	return nomes
-
-def ConfereChavesEstrutura(Estrutura_item): # teste de formatação das chaves do dicionario estrutura basico
-		chaves=[u'adjetivo', u'Nome', 'MediaGeral', 'Amostra', u'Narrativa', u'pronome', u'verbo', u'substantivo', u'Numero', u'Sexo', u'Idade', u'preposi\xe7\xe3o', u'Grupo', u'conjun\xe7\xe3o']
-		chaves.sort()
-		E=Estrutura_item.keys()
-		E.sort()
-		if E == chaves:
-			return True
-		else:
-			return False
-
-
-def EstruturaFiltrada(): #cria uma estrutura em dicionario separadando todas amostras numa unica chave de nome do sujeito
-# retorna par (lista de medias da amostra, ficha ) - "ficha" tem os dados imutaveis - Sexo, Numero,Idade,Grupo
-	from data import Estrutura #LEMBRE DE ESCREVER ESTA ESTRUTURA NO ARQUIVO - VAI FACILITAR	
-	n=Nomes()
-	d={}
-	dDados={}
-	l=[]
-	MediaGeralTotal=0.0
-	lc=listadeclasses()
-	MediaClasses={}
-	cSOMA=0.0
-	pSOMA=0.0
-	for i in n:
-		for item in Estrutura:
-			if item['Nome']==i:
-				l.append(item)
-				MediaGeralTotal = MediaGeralTotal + item['MediaGeral']
-				sexo=item.pop('Sexo')
-				numero=item.pop('Numero')
-				idade=item.pop('Idade')
-				grupo=item.pop('Grupo')
-				#for classe in lc:
-				#	cSOMA=(item[classe][0]*item[classe][1])+cSOMA
-				#	pSOMA=item[classe][0]+pSOMA
-				#	MediaClasses[classe]=cSOMA/pSOMA
-				#	dDados['MediaDasClasses']=MediaClasses
-				#cSOMA=0.0
-				#pSOMA=0.0
-		
-		dDados['Sexo']=sexo				
-		dDados['Numero']=numero
-		dDados['Idade']=idade
-		dDados['Grupo']=grupo
-		dDados['MediaGeralTotal']=MediaGeralTotal/15
-		d[i]=(l,dDados) # par (listadeamostras,ficha)
-		#MediaClasses[classe]=0.0
-		
-		MediaGeralTotal=0.0 #zera para proximo sujeito
-		l=[]#zera para proximo sujeito
-		dDados={}#zera para proximo sujeito
-	#dDados['MediaDasClasses']=MediaClasses
-			
-	
-	return d 	
-
-
-def DATAFILE2renderiza():
-	x='EstruturaF='+str(EstruturaFiltrada())
-	dados=open(PYPATH+'data2.py','w')
-	dados.write(x)
-
-def rendertudo():
-	if DATAFILErenderiza():
-		DATAFILE2renderiza()
-		print "***************Gerados novos dicionários base."
-	else:
-		print "***************Cheque os arquivos citados ou elimine a pasta destes da renderização."
-		
-
-
-if __name__ == '__main__':
-	rendertudo()
 

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from filtra import *
+
 from Tkinter import *
 import tkMessageBox
 import Tkinter, tkFileDialog
@@ -12,49 +12,21 @@ import locale
 import os
 language, output_encoding = locale.getdefaultlocale()
 
-import barra
+#importa a estrutura filtrada original
+from filtra_estrutura import *
 
-#from data import *
 
 
 homedir = os.path.expanduser('~') 
 
 root = Tk()
 root.title("Tipos de Relatório")
-
-#
 w, h = root.winfo_screenwidth(), root.winfo_screenheight()
-#
-# use the next line if you also want to get rid of the titlebar
-#
-#root.overrideredirect(1)
-#
+
 root.geometry("%dx%d+0+0" % (w, h))
 
-#var = IntVar()
 
 ######## funcoes globais
-
-
-"""
-def newDIR():
-	dirname = tkFileDialog.askdirectory(parent=root,initialdir=homedir,title='Selecione o diretorio de trabalho')
-	if len(dirname ) > 0:
-		msg= "Escolhestes" + dirname 
-		print dirname
-		#tkMessageBox.showinfo("Pronto!", "Os relatorios ja foram gerados e estao no diretorio " + dirname)
-		
-
-def EscolheDIR():
-	a=tkMessageBox.askquestion("Confirmar Diretorio", "O diretorio e trabalho é "+ homedir + " ?")
-	if a == "no":
-		newDIR()
-
-
-todasamostras=["Mecânica1 (A1)","Mecânica1 (A2)","Mecânica1 (A3)","Mecânica2 (A1)","Mecânica2 (A2)","Mecânica2 (A3)","Comportamental1 (A1)","Comportamental1 (A2)","Comportamental1 (A3)","Comportamental2 (A1)","Comportamental2 (A2)","Comportamental2 (A3)","Intencional (A1)","Intencional (A2)","Intencional (A3)"]
-
-"""
-
 
 def donothing():
 	tkMessageBox.showinfo("Pronto!", "Os relatorios ja foram gerados e estao no diretorio " )
@@ -69,7 +41,6 @@ sujeitos=[]
 for i in EstruturaF.keys():
 	sujeitos.append(i)
 
-#sujeitos=["Brenda","Felipe Moreno","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina","Marcelo","Jarbas","Jonas","Luana","Solange","Janaina"]
 grupos=["Pesquisa","Controle"]
 idade=["7 anos","8 anos","9 anos","10 anos"] 
 historia=[u'Mecânica1',u'Mecânica2',"Comportamental1","Comportamental2","Intencional"]
@@ -547,21 +518,62 @@ def limpa():
 	global text
 	text.delete(0.0,END)
 
+
+
+
 def rendershell():
 	c = Toplevel(root)
 	c.title("Renderização")
-	c.geometry('320x240+230+130')
+	c.geometry('500x400+230+130')
 	t = Text(c,foreground="orange",background="black")
 	t.pack()
-	tkMessageBox.showwarning("Renderizando","Aguarde o resultado da análise!")
-	p = os.popen("python renderiza.py", 'r')
-	for l in p.xreadlines():
-		t.insert(END, '%s\n' % l.rstrip())
+	c.tk.call('update')
+	renderizado=[]
+	todos=abretudo()
+	if not todos[0]:
+		t.insert(END,"\nERRO!!\nExistem arquivos faltantes nas pastas: \n")
 		t.tk.call('update')
-		#t.see(END)
-		#t.update_idletasks()
-		
-	c.focus_set()
+		for folder_nome in todos[1]:
+			t.insert(END,folder_nome +"\n")
+			t.tk.call('update')
+		t.see(END)
+		c.tk.call('update')
+		c.focus_set()
+	else:
+			
+		erros=[]
+		for i in todos[1]:
+			try:
+				t.insert(END, "\n\nRenderizando arquivo: "+ str(i))
+				t.tk.call('update')
+				renderizado.append(estrutura(i))
+				t.insert(END,"\n+++++++ OK!")
+				t.tk.call('update')
+				t.see(END)
+			except KeyError:
+				erros.append(str(i))
+				t.insert(END, "\n~~~~~ERRO!!!! ")
+				t.tk.call('update')
+				t.see(END)
+				
+		if not erros:
+			x='Estrutura='+str(renderizado)
+			dados=open(PYPATH+'data.py','w')
+			dados.write(x)
+			t.insert(END, "\n\nRenderização bem sucedida! - Reinicie o Programa.\n")
+			t.tk.call('update')
+			t.see(END)
+		else:
+			t.insert(END, "\n\nEncontrados erros nos seguintes arquivos:\n")
+			t.tk.call('update')
+			for erro in erros:
+				t.insert(END, erro +"\n")
+				t.tk.call('update')
+			t.insert(END, "\nConserte os arquivos ou retire sua pasta da 	renderização.")
+			t.tk.call('update')
+			t.see(END)
+		c.tk.call('update')
+		c.focus_set()
 
 
 

@@ -553,13 +553,18 @@ def rendershell():
 	c.geometry('320x240+230+130')
 	t = Text(c,foreground="orange",background="black")
 	t.pack()
-	c.focus_set()
-	p = os.popen("find . -name '*.py'", 'r')
-	#p = os.popen("python renderiza.py", 'r')
+	tkMessageBox.showwarning("Renderizando","Aguarde o resultado da análise!")
+	p = os.popen("python renderiza.py", 'r')
 	for l in p.xreadlines():
 		t.insert(END, '%s\n' % l.rstrip())
 		t.see(END)
 		t.update_idletasks()
+		
+	c.focus_set()
+
+
+
+
 
 
 ################### MENU

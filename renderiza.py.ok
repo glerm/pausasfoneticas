@@ -221,6 +221,14 @@ def abretudo(): #lista com todos paths de arquivo
 	
 	return tudo
 
+#def renderiza():
+#	renderizado=[]
+#	todos=abretudo()
+#	for i in todos:
+#		print "Renderizando arquivo: " + str(i)
+#		renderizado.append(estrutura(i))
+#		print "-----------------------------→ OK!"
+#	return renderizado
 
 def renderiza():
 	renderizado=[]
