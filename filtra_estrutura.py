@@ -12,15 +12,15 @@ import numpy
 
 from trata_arquivos import *
 
-
 from data import Estrutura
+
 
 def Nomes():
 	nomes=list(set([(i['Nome']) for i in Estrutura]))
 	return nomes
 
 
-def EstruturaFiltrada(): 
+def EstruturaFiltrada(Estrutura): ### RETIRE O ARGUMENTO SE DER ERRO!!! 11 NOV 2010
 #Cria uma estrutura em dicionario separadando todas amostras numa unica chave de nome do sujeito.
 #Retorna par (lista de medias da amostra, ficha ) - "ficha" tem os dados imutaveis - Sexo, Numero,Idade,Grupo
 	n=Nomes()
@@ -37,11 +37,11 @@ def EstruturaFiltrada():
 			if item['Nome']==i:
 				l.append(item)
 				MediaGeralTotal = MediaGeralTotal + item['MediaGeral']
-				sexo=item.pop('Sexo')
-				numero=item.pop('Numero')
-				idade=item.pop('Idade')
-				grupo=item.pop('Grupo')
-		dDados['Sexo']=sexo				
+				sexo=item.get('Sexo') #troquei pop por get
+				numero=item.get('Numero') #troquei pop por get
+				idade=item.get('Idade') #troquei pop por get
+				grupo=item.get('Grupo') #troquei pop por get
+		dDados['Sexo']=sexo
 		dDados['Numero']=numero
 		dDados['Idade']=idade
 		dDados['Grupo']=grupo
@@ -58,8 +58,8 @@ def EstruturaFiltrada():
 	return d 	
 
 
-
-EstruturaF=EstruturaFiltrada()
+E=Estrutura
+EstruturaF=EstruturaFiltrada(E)
 
 
 def MediasTodasNarrativas():
@@ -101,37 +101,43 @@ def MediasGramaticas(estrutura,nome,classe_gramatical):
 	for i in range (len(estrutura[nome][0])):
 		if estrutura[nome][0][i][classe_gramatical][1] != 0:
 			L.append(estrutura[nome][0][i][classe_gramatical][1])
-
-	return sum(L)/len(L)
+	if len(L) != 0:
+		return sum(L)/len(L)
+	else:
+		return 0
 
 	
 
 ########TESTES DE CONSISTÊNCIA#########################################
 
-def SepararAmostrasIndividuais():
+def SepararAmostrasIndividuais(EstruturaF): #RETIRE O ARGUMENTO SE DER ERRO
 	l=[]
 	d={}
 	e=EstruturaF
 	for key in e:
 		for item in e[key][0]:# e[key] contem o par (listadeamostras,ficha)
 			l.append(str(item['Narrativa'])+str(item['Amostra']))
+			l.sort()
 			d[key]=l
 		l=[]	
 	return d
 
 
-def ChecarErrosAmostras(): #compara padroes dos lotes de arquivo (testar a necessidade de implementar outros casos)
+def ChecarErrosAmostras(EstruturaF): #compara padroes dos lotes de arquivo (testar a necessidade de implementar outros casos)
 	d={}
-	amostras=SepararAmostrasIndividuais()
+	amostras=SepararAmostrasIndividuais(EstruturaF)
 	AMOSTRAS_PADRAO=listadeamostras()
 	AMOSTRAS_PADRAO.sort()
 	for i in amostras:
 		a=amostras[i]
 		a.sort()
 		d[str(i)]=(AMOSTRAS_PADRAO == a)
-		#d={str(i):AMOSTRAS == a}
-	
 	return d
+
+
+##########################################################################
+'''
+#parece  que não é necessário checar as chaves individualmente pois ja há um teste de KeyError na renderização da janela. Mas fica aqui a idéia caso precise:
 
 def ConfereChavesEstrutura(Estrutura_item): # teste de formatação das chaves do dicionario estrutura basico
 		chaves=[u'adjetivo', u'Nome', 'MediaGeral', 'Amostra', u'Narrativa', u'pronome', u'verbo', u'substantivo', u'Numero', u'Sexo', u'Idade', u'preposi\xe7\xe3o', u'Grupo', u'conjun\xe7\xe3o']
@@ -142,5 +148,5 @@ def ConfereChavesEstrutura(Estrutura_item): # teste de formatação das chaves d
 			return True
 		else:
 			return False
-
+'''
 

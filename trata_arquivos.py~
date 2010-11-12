@@ -212,6 +212,7 @@ def sujeitos():
 def abretudo(): #lista com todos paths de arquivo
 	tudo=[]
 	folder_erro=[]
+	todos_no_folder=0
 	for i in sujeitos():
 		for infile in glob.glob( os.path.join(i, '*.aup')):
 			todos_no_folder=todos_no_folder+1
@@ -223,5 +224,18 @@ def abretudo(): #lista com todos paths de arquivo
 		return (False,folder_erro)
 	else:
 		return (True,tudo)
+	
+####erros:
+
+def erros_narrativa(Estrutura):
+	l=[]
+	d={}
+	e=Estrutura
+	for key in e:
+		l.append(str(key['Narrativa'])+str(key['Amostra']))
+		l.sort()
+	d[key['Nome']]=l
+	l=[]	
+	return d
 
 

@@ -14,6 +14,7 @@ language, output_encoding = locale.getdefaultlocale()
 
 #importa a estrutura filtrada original
 from filtra_estrutura import *
+from configs import * #importa paths
 
 
 
@@ -376,7 +377,7 @@ def CSVfiltraSujeito():
 	csv=csv.encode('utf-8')
 	msg="Gravado arquivo PAUSASporSujeito.csv"
 	text.insert(INSERT, msg)
-	dados=open('PAUSASporSujeito.csv','w')
+	dados=open(CSVpath+'PAUSASporSujeito.csv','w')
 	dados.write(csv)
 	janeladeaviso(msg)
 	a.CELULAlimpa()
@@ -401,7 +402,7 @@ def CSVfiltraGrupo():
 	csv=csv.encode('utf-8')
 	msg="Gravado arquivo PAUSASporGrupo.csv"
 	text.insert(INSERT, msg)
-	dados=open('PAUSASporGrupo.csv','w')
+	dados=open(CSVpath+'PAUSASporGrupo.csv','w')
 	dados.write(csv)
 	janeladeaviso(msg)
 	b.CELULAlimpa()
@@ -430,7 +431,7 @@ def CSVfiltraIdade():
 	csv=csv.encode('utf-8')
 	msg="Gravado arquivo PAUSASporIdade.csv"
 	text.insert(INSERT, msg)
-	dados=open('PAUSASporIdade.csv','w')
+	dados=open(CSVpath+'PAUSASporIdade.csv','w')
 	dados.write(csv)
 	janeladeaviso(msg)
 	c.CELULAlimpa()
@@ -459,7 +460,7 @@ def CSVfiltraHistoria():
 	csv=csv.encode('utf-8')
 	msg="Gravado arquivo PAUSASHistoria.csv"
 	text.insert(INSERT, msg)
-	dados=open('PAUSASHistoria.csv','w')
+	dados=open(CSVpath+'PAUSASHistoria.csv','w')
 	dados.write(csv)
 	dados.close()
 	janeladeaviso(msg)
@@ -478,7 +479,7 @@ def CSVfiltraGramatica():
 	csv=csv.encode('utf-8')
 	msg="Gravado arquivo PAUSASGramatica.csv"
 	text.insert(INSERT, msg)
-	dados=open('PAUSASGramatica.csv','w')
+	dados=open(CSVpath+'PAUSASGramatica.csv','w')
 	dados.write(csv)
 	dados.close()
 	janeladeaviso(msg)
@@ -506,7 +507,7 @@ def CSVfiltraSexo():
 	csv=csv.encode('utf-8')
 	msg="Gravado arquivo PAUSASporSexo.csv"
 	text.insert(INSERT, msg)
-	dados=open('PAUSASporSexo.csv','w')
+	dados=open(CSVpath+'PAUSASporSexo.csv','w')
 	dados.write(csv)
 	janeladeaviso(msg)
 	f.CELULAlimpa()
@@ -517,6 +518,7 @@ def CSVfiltraSexo():
 def limpa():
 	global text
 	text.delete(0.0,END)
+
 
 
 
@@ -557,12 +559,26 @@ def rendershell():
 				t.see(END)
 				
 		if not erros:
-			x='Estrutura='+str(renderizado)
-			dados=open(PYPATH+'data.py','w')
-			dados.write(x)
-			t.insert(END, "\n\nRenderização bem sucedida! - Reinicie o Programa.\n")
-			t.tk.call('update')
-			t.see(END)
+			#testa se nao ha narrativas com nome errados repetidos (erros de entrada)
+			erros_entrada=ChecarErrosAmostras(EstruturaFiltrada(renderizado))
+			if (False in erros_entrada.itervalues()):
+				t.insert(END, "\n**********ERRO!!!!!!*********\nErros na entrada de dados - Repetição da Chave Narrativa nas amostras:\n")
+				t.tk.call('update')
+				for val in erros_entrada.items():
+					if not val[1]: #se o valor not(False) isto é - havia inconsistencia
+						t.insert(END, "++++ "+ str(val[0]) + " +++++\n")
+						t.tk.call('update')
+				t.insert(END, "\n\nCheque se há entradas repetidas ou erradas no campo Narrativa de suas fichas.\n")
+				t.tk.call('update')
+				t.see(END)
+			else:
+				####ok! grava
+				x='Estrutura='+str(renderizado)
+				dados=open(PYPATH+'data.py','w')
+				dados.write(x)
+				t.insert(END, "\n\nRenderização bem sucedida! - Reinicie o Programa.\n")
+				t.tk.call('update')
+				t.see(END)
 		else:
 			t.insert(END, "\n\nEncontrados erros nos seguintes arquivos:\n")
 			t.tk.call('update')
@@ -617,8 +633,11 @@ root.config(menu=menubar)
 #Tframe=Tkinter.Frame(root,height="100")
 #Tframe.grid(row=3,column=0,columnspan=6,sticky=W)
 
+
+
 Tscroll = Scrollbar(root)
-Tscroll.grid(row=3,column=0,sticky=N+S+E,ipadx="7")
+#Tscroll.grid(row=3,column=0,sticky=N+S+E,ipadx="7")
+
 
 
 text = Text(root,wrap=WORD,yscrollcommand=Tscroll.set, width="100",height="18",bd=5,font=("Arial",12))
@@ -628,17 +647,7 @@ text = Text(root,wrap=WORD,yscrollcommand=Tscroll.set, width="100",height="18",b
 Tscroll.config(command=text.yview) #ativa o scroll dentro do texto
 text.grid(row=3,column=1,columnspan=6,sticky=N+W,)
 
-
-
-
-
-
-
 root.mainloop()
 
 
-
-
-
-root.mainloop()
 

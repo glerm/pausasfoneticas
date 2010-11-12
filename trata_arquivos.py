@@ -224,5 +224,9 @@ def abretudo(): #lista com todos paths de arquivo
 		return (False,folder_erro)
 	else:
 		return (True,tudo)
+	
+
+
+
 
 

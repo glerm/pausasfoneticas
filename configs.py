@@ -4,7 +4,7 @@ import os
 
 homedir = os.path.expanduser('~')
 
-PYPATH= '/home/glerm/fonoaudiologia/python/pausasfoneticas/'
+PYPATH= './'
 
 ROOTpath = homedir+'/fonoaudiologia/novas_amostras/'
 
