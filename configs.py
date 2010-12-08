@@ -6,7 +6,8 @@ homedir = os.path.expanduser('~')
 
 PYPATH= './'
 
-ROOTpath = homedir+'/fonoaudiologia/novas_amostras/'
+ROOTpath = homedir+'/fonoaudiologia/amostras_ruins/'
+#ROOTpath = homedir+'/fonoaudiologia/novas_amostras/'
 
 CSVpath = PYPATH+'csv/'
 

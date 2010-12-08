@@ -15,6 +15,8 @@ from trata_arquivos import *
 from data import Estrutura
 
 
+
+
 def Nomes():
 	nomes=list(set([(i['Nome']) for i in Estrutura]))
 	return nomes
@@ -133,6 +135,18 @@ def ChecarErrosAmostras(EstruturaF): #compara padroes dos lotes de arquivo (test
 		a.sort()
 		d[str(i)]=(AMOSTRAS_PADRAO == a)
 	return d
+
+def ChecarErrosAmostrasTodas(EstruturaF): #compara padroes dos lotes de arquivo (testar a necessidade de implementar outros casos)
+	erro_na_tag=[]
+	amostras=SepararAmostrasIndividuais(EstruturaF)
+	AMOSTRAS_PADRAO=["M1A1","M1A2","M1A3","M2A1","M2A2","M2A3","C1A1","C1A2","C1A3","C2A1","C2A2","C2A3","I1A1","I1A2","I1A3"]
+	AMOSTRAS_PADRAO.sort()
+	for i in amostras:
+		a=amostras[i]
+		a.sort()
+		if AMOSTRAS_PADRAO != a:
+			erro_na_tag.append(i)
+	return erro_na_tag
 
 
 ##########################################################################
