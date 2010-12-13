@@ -112,7 +112,7 @@ def MediasGramaticas(estrutura,nome,classe_gramatical):
 
 ########TESTES DE CONSISTÊNCIA#########################################
 
-def SepararAmostrasIndividuais(EstruturaF): #RETIRE O ARGUMENTO SE DER ERRO
+def SepararAmostrasIndividuais(EstruturaF): 
 	l=[]
 	d={}
 	e=EstruturaF
@@ -123,6 +123,47 @@ def SepararAmostrasIndividuais(EstruturaF): #RETIRE O ARGUMENTO SE DER ERRO
 			d[key]=l
 		l=[]	
 	return d
+
+def SepararErroSexo(EstruturaF): #devolve lista das amostras onde há um erro na chave sexo
+	l=[]
+	d={}
+	e=EstruturaF
+	for key in e:
+		for item in e[key][0]:# e[key] contem o par (listadeamostras,ficha)
+			if (str(item['Sexo'])) != ('M' or 'F'):
+				l.append(str(item['Narrativa'])+str(item['Amostra'])+": "+str(item['Sexo']))
+				d[key]=l
+		l=[]
+	return d
+
+def SepararErroGrupo(EstruturaF): #devolve lista das amostras onde há um erro na pesquisa
+	l=[]
+	d={}
+	e=EstruturaF
+	for key in e:
+		for item in e[key][0]:# e[key] contem o par (listadeamostras,ficha)
+			if (str(item['Grupo'])) != ('P' or 'C'):
+				l.append(str(item['Narrativa'])+str(item['Amostra'])+": "+str(item['Grupo']))
+				d[key]=l
+		l=[]
+	return d
+
+def SepararErroIdade(EstruturaF): #devolve lista das amostras onde há um erro na pesquisa
+	l=[]
+	d={}
+	e=EstruturaF
+	for key in e:
+		for item in e[key][0]:# e[key] contem o par (listadeamostras,ficha)
+			if 'a' not in (str(item['Idade'])):
+				l.append(str(item['Narrativa'])+str(item['Amostra'])+": "+str(item['Idade']))
+				d[key]=l
+		l=[]
+	return d
+
+
+
+
+
 
 
 def ChecarErrosAmostras(EstruturaF): #compara padroes dos lotes de arquivo (testar a necessidade de implementar outros casos)
@@ -136,22 +177,34 @@ def ChecarErrosAmostras(EstruturaF): #compara padroes dos lotes de arquivo (test
 		d[str(i)]=(AMOSTRAS_PADRAO == a)
 	return d
 
-def ChecarErrosAmostrasTodas(EstruturaF): #compara padroes dos lotes de arquivo (testar a necessidade de implementar outros casos)
-	erro_na_tag=[]
+def ChecarErrosAmostrasTodas(EstruturaF): 
+	dic_erros={}
+	erro_nas_amostras=[]
 	amostras=SepararAmostrasIndividuais(EstruturaF)
+	sexo=SepararErroSexo(EstruturaF)
+	grupo=SepararErroGrupo(EstruturaF)
+	idade=SepararErroIdade(EstruturaF)
 	AMOSTRAS_PADRAO=["M1A1","M1A2","M1A3","M2A1","M2A2","M2A3","C1A1","C1A2","C1A3","C2A1","C2A2","C2A3","I1A1","I1A2","I1A3"]
 	AMOSTRAS_PADRAO.sort()
 	for i in amostras:
 		a=amostras[i]
 		a.sort()
 		if AMOSTRAS_PADRAO != a:
-			erro_na_tag.append(i)
-	return erro_na_tag
+			erro_nas_amostras.append((i,a))
+		dic_erros['Erro_Amostras']=erro_nas_amostras
+		if sexo:
+			dic_erros['Erro_Sexo']=sexo
+		if grupo:
+			dic_erros['Erro_Grupo']=grupo
+		if idade:
+			dic_erros['Erro_Idade']=idade
+				
+			
+	return dic_erros
 
 
 ##########################################################################
 '''
-#parece  que não é necessário checar as chaves individualmente pois ja há um teste de KeyError na renderização da janela. Mas fica aqui a idéia caso precise:
 
 def ConfereChavesEstrutura(Estrutura_item): # teste de formatação das chaves do dicionario estrutura basico
 		chaves=[u'adjetivo', u'Nome', 'MediaGeral', 'Amostra', u'Narrativa', u'pronome', u'verbo', u'substantivo', u'Numero', u'Sexo', u'Idade', u'preposi\xe7\xe3o', u'Grupo', u'conjun\xe7\xe3o']

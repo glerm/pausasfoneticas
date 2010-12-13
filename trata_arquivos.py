@@ -57,7 +57,7 @@ def tag(arq): #recebe arquivo, extrai a sopa XML tag deste e retorna dicionario
 		d[s('tag')[n]['name']]=s('tag')[n]['value'] #formata o dicionario
 		n=n+1
 
-	#remover as tags indesejadas depois da contrução
+	#remover as tags indesejadas depois da construção
 	if d.has_key('id3v2'):
 		d.pop('id3v2')
 	if d.has_key('TRACKNUMBER'):
@@ -67,7 +67,23 @@ def tag(arq): #recebe arquivo, extrai a sopa XML tag deste e retorna dicionario
 	if d.has_key('GENRE'):
 		d.pop('GENRE')
 	if d.has_key(u'G\xeanero'):
-		d['Sexo']=d.pop(u'G\xeanero') #elimina possibilidade de erro na chave(fazer tambem com acentos e minusculas)
+		d['Sexo']=d.pop(u'G\xeanero')
+	if d.has_key(u'sexo'):
+		d['Sexo']=d.pop(u'sexo')
+	if d.has_key(u'nome'):
+		d['Nome']=d.pop(u'nome')
+	if d.has_key(u'narrativa'):
+		d['Narrativa']=d.pop(u'narrativa')
+	if d.has_key(u'numero'):
+		d['Numero']=d.pop(u'numero')
+	if d.has_key(u'n\xfamero'):
+		d['Numero']=d.pop(u'n\xfamero')
+	if d.has_key(u'N\xfamero'):
+		d['Numero']=d.pop(u'N\xfamero')
+	if d.has_key(u'idade'):
+		d['Idade']=d.pop(u'idade')
+	if d.has_key(u'grupo'):
+		d['Grupo']=d.pop(u'grupo')
 	return d
 
 
@@ -197,7 +213,6 @@ def estrutura (arq): #inserir a contrução da tag aqui dentro mesmo? ele nao pr
 	E['Narrativa']=E['Narrativa'][0]+E['Narrativa'][1] # separando Narrativa de Amostra
 	return E
 ##########################################################################			
-	
 
 ################# abrindo e escrevendo o dicionario
 
