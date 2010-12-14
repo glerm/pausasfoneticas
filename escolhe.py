@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from Tkinter import *
 import tkMessageBox
-from render import rendershell
 from filtra_estrutura import *
 from configs import * #importa paths
 from data import Estrutura
@@ -26,7 +25,10 @@ def Teste_de_Erros():
 			status=status+str(erros_entrada['Erro_Grupo'])+"\n"
 			status=status+"\n++++ Idade:\n"
 			status=status+str(erros_entrada['Erro_Idade'])+"\n"
-			status=status+u'\nConfira inconsistências nas entradas indicadas acima.\nCorrija antes de rodar uma nova renderização.'
+			#status=status+"\n++++ Chave:\n"
+			#status=status+str(erros_entrada['Erro_Chave'])+"\n"
+			#mensagem para reiniciar e consertar os erros:
+			status=status+u'\nConfira inconsistências nas entradas indicadas acima.\nCorrija os arquivos e reinicie antes de rodar uma nova renderização.'
 		else:
 			status=u'Aparentemente não existem erros nas amostras. Feche este programa e rode o Gerador de Médias.'
 	else:
@@ -57,10 +59,18 @@ def muda():
 		for i in todos[1]:
 				t.insert(END, "\n\nRenderizando arquivo: "+ str(i))
 				t.tk.call('update')
-				renderizado.append(estrutura(i))
-				t.insert(END,"\n+++++++ OK!")
-				t.tk.call('update')
-				t.see(END)
+				try:
+					renderizado.append(estrutura(i))
+					t.insert(END,"\n+++++++ OK!")
+					t.tk.call('update')
+					t.see(END)
+				except:
+					t.insert(END,"\n+++++++ ERRO NAS CHAVES OU CLASSES DE PALAVRAS DO ARQUIVO ACIMA!\n As chaves e classes permitidas são:")
+					t.insert(END,u'\nAmostra, Grupo, Idade, Narrativa, Nome, Numero, Sexo,\nadjetivo, conjun\xe7\xe3o, preposi\xe7\xe3o, pronome, substantivo, verbo')
+					t.tk.call('update')
+					t.see(END)
+					break
+					
 		else:
 			####ok! grava
 			x='Estrutura='+str(renderizado)
@@ -70,18 +80,27 @@ def muda():
 			tkMessageBox.showinfo("Pronto!", "Gravado arquivo da nova renderização. Reinicie este programa para checar se foi encontrada alguma inconsistência." )
 			t.tk.call('update')
 			t.see(END)
+			
+			
+
+scrollbar = Scrollbar(root)
+scrollbar.pack(side=LEFT, fill=Y)
+
+
+
 
 
 text = Text(root,wrap=WORD,width="100",height="30",bd=5,font=("Arial",13), foreground="orange",background="black")
 text.insert(INSERT, status)
 text.see(END)
+text.config(yscrollcommand=scrollbar.set)
 text.pack()
 
 
 b = Button(toolbar, text="Renderização", command=muda)
 b.pack(side=LEFT, padx=2, pady=2)
 
-
+scrollbar.config(command=text.yview)
 toolbar.pack(side=TOP, fill=X)
 
 mainloop()

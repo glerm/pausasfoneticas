@@ -51,11 +51,17 @@ def tag(arq): #recebe arquivo, extrai a sopa XML tag deste e retorna dicionario
 
 	S=s() #converte a tipo sopa em tipo lista
 	d={}
-	
+	erro=(False, '')
+	chaves=['Amostra', u'Grupo', u'Idade', 'MediaGeral', 'MediaGeralTotal', u'Narrativa', u'Nome', u'Numero', u'Sexo','id3v2','TRACKNUMBER','YEAR','GENRE',u'G\xeanero']
+
 	n=0
 	for i in S:
-		d[s('tag')[n]['name']]=s('tag')[n]['value'] #formata o dicionario
-		n=n+1
+		if (str(s('tag')[n]['name']) in chaves):
+			d[s('tag')[n]['name']]=s('tag')[n]['value'] #formata o dicionario
+			n=n+1
+		else:
+			erro=(True, ("Entrada Errada: "+str(s('tag')[n]['name'])))
+			break
 
 	#remover as tags indesejadas depois da construção
 	if d.has_key('id3v2'):
@@ -84,7 +90,12 @@ def tag(arq): #recebe arquivo, extrai a sopa XML tag deste e retorna dicionario
 		d['Idade']=d.pop(u'idade')
 	if d.has_key(u'grupo'):
 		d['Grupo']=d.pop(u'grupo')
-	return d
+
+########
+	if erro[0]:
+		raise KeyError (erro[1])
+	else:
+		return d
 
 
 
@@ -92,6 +103,7 @@ def pclasses(arq): #recebe arquivo aup e retorna lista ordenada das classes da p
 
 	sopa=label(arq)
 	tam=0
+	classes=[u'substantivo', u'adjetivo', u'verbo', u'conjunção', u'preposição', u'pronome']
 	l=[] #lista buffer
 
 	for t in sopa.findAll("label"):
@@ -100,7 +112,12 @@ def pclasses(arq): #recebe arquivo aup e retorna lista ordenada das classes da p
 		tam=tam+1
 
 	l=[x.lower() for x in l] #converte todas as classes para minusculas
+# IMPLEMENTAR APOS OUVER UMA REVISAO MAIS CRITERIOSA NA ENTRADA - OU DETECTAR PROBLEMA DE ENTRDAS SEM CLASSE
+#	erros=list(set(l).difference(set(classes)))
 	
+#	if erros:
+#		raise KeyError (str(l))
+#	else:
 	return l
 	
 
@@ -202,8 +219,8 @@ def mediadaclasse(arq,pclasse): #recebe arquivo e classe buscada e retorna tupla
 
 	return Mclasse
 
-####################### melhorar:
-def estrutura (arq): #inserir a contrução da tag aqui dentro mesmo? ele nao precisa abrir o arq - 3x mudar isso
+####################### contrução da estrutura inicial:
+def estrutura (arq):
 	classes=[u'substantivo', u'adjetivo', u'verbo', u'conjunção', u'preposição', u'pronome']
 	E=tag(arq)
 	E['MediaGeral']=media(arq)
@@ -212,7 +229,7 @@ def estrutura (arq): #inserir a contrução da tag aqui dentro mesmo? ele nao pr
 	E['Amostra']=E['Narrativa'][2]+E['Narrativa'][3]# separando Narrativa de Amostra
 	E['Narrativa']=E['Narrativa'][0]+E['Narrativa'][1] # separando Narrativa de Amostra
 	return E
-##########################################################################			
+##########################################################################
 
 ################# abrindo e escrevendo o dicionario
 
