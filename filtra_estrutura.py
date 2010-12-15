@@ -160,7 +160,75 @@ def SepararErroIdade(EstruturaF): #devolve lista das amostras onde há um erro n
 		l=[]
 	return d
 
+def ChecarErrosAmostrasTodas(EstruturaF): 
+	dic_erros={}
+	erro_nas_amostras=[]
+	amostras=SepararAmostrasIndividuais(EstruturaF)
+	sexo=SepararErroSexo(EstruturaF)
+	grupo=SepararErroGrupo(EstruturaF)
+	idade=SepararErroIdade(EstruturaF)
+#	chave=SepararErrosChaves(EstruturaF)
+	AMOSTRAS_PADRAO=["M1A1","M1A2","M1A3","M2A1","M2A2","M2A3","C1A1","C1A2","C1A3","C2A1","C2A2","C2A3","I1A1","I1A2","I1A3"]
+	AMOSTRAS_PADRAO.sort()
+	for i in amostras:
+		a=amostras[i]
+		a.sort()
+		if AMOSTRAS_PADRAO != a:
+			DIFF=[diff for diff in AMOSTRAS_PADRAO+a if diff not in AMOSTRAS_PADRAO or diff not in a]
+			erro_nas_amostras.append((i,DIFF))
+#escreve o dicionario
+	if erro_nas_amostras:
+		dic_erros['Erro_Amostras']=erro_nas_amostras
+	else:
+		dic_erros['Erro_Amostras']="ok"
+	if sexo:
+		dic_erros['Erro_Sexo']=sexo
+	else:
+		dic_erros['Erro_Sexo']="ok"
+	if grupo:
+		dic_erros['Erro_Grupo']=grupo
+	else:
+		dic_erros['Erro_Grupo']="ok"
+	if idade:
+		dic_erros['Erro_Idade']=idade
+	else:
+		dic_erros['Erro_Idade']="ok"
+#	if chave:
+#		dic_erros['Erro_Chave']=chave
+#	else:
+#		dic_erros['Erro_Chave']="Nenhum"
+
+	if (['ok','ok','ok','ok']) == (dic_erros.values()):
+		dic_erros = False
+
+	return dic_erros
+
+
+##########################################################################tentativas anteriores:
 '''
+
+def ConfereChavesEstrutura(Estrutura_item): # teste de formatação das chaves do dicionario estrutura basico
+		chaves=[u'adjetivo', u'Nome', 'MediaGeral', 'Amostra', u'Narrativa', u'pronome', u'verbo', u'substantivo', u'Numero', u'Sexo', u'Idade', u'preposi\xe7\xe3o', u'Grupo', u'conjun\xe7\xe3o']
+		chaves.sort()
+		E=Estrutura_item.keys()
+		E.sort()
+		if E == chaves:
+			return True
+		else:
+			return False
+
+def ChecarErrosAmostras(EstruturaF): #compara padroes dos lotes de arquivo (testar a necessidade de implementar outros casos)
+	d={}
+	amostras=SepararAmostrasIndividuais(EstruturaF)
+	AMOSTRAS_PADRAO=listadeamostras()
+	AMOSTRAS_PADRAO.sort()
+	for i in amostras:
+		a=amostras[i]
+		a.sort()
+		d[str(i)]=(AMOSTRAS_PADRAO == a)
+	return d
+
+
 def SepararErrosChaves(EstruturaF): #devolve lista das amostras onde há um erro na pesquisa
 	l=[]
 	d={}
@@ -178,69 +246,4 @@ def SepararErrosChaves(EstruturaF): #devolve lista das amostras onde há um erro
 
 
 
-
-def ChecarErrosAmostras(EstruturaF): #compara padroes dos lotes de arquivo (testar a necessidade de implementar outros casos)
-	d={}
-	amostras=SepararAmostrasIndividuais(EstruturaF)
-	AMOSTRAS_PADRAO=listadeamostras()
-	AMOSTRAS_PADRAO.sort()
-	for i in amostras:
-		a=amostras[i]
-		a.sort()
-		d[str(i)]=(AMOSTRAS_PADRAO == a)
-	return d
-
-def ChecarErrosAmostrasTodas(EstruturaF): 
-	dic_erros={}
-	erro_nas_amostras=[]
-	amostras=SepararAmostrasIndividuais(EstruturaF)
-	sexo=SepararErroSexo(EstruturaF)
-	grupo=SepararErroGrupo(EstruturaF)
-	idade=SepararErroIdade(EstruturaF)
-#	chave=SepararErrosChaves(EstruturaF)
-	AMOSTRAS_PADRAO=["M1A1","M1A2","M1A3","M2A1","M2A2","M2A3","C1A1","C1A2","C1A3","C2A1","C2A2","C2A3","I1A1","I1A2","I1A3"]
-	AMOSTRAS_PADRAO.sort()
-	for i in amostras:
-		a=amostras[i]
-		a.sort()
-		if AMOSTRAS_PADRAO != a:
-			erro_nas_amostras.append((i,a))
-#escreve o dicionario
-	if erro_nas_amostras:
-		dic_erros['Erro_Amostras']=erro_nas_amostras
-	else:
-		dic_erros['Erro_Amostras']="Nenhum"
-	if sexo:
-		dic_erros['Erro_Sexo']=sexo
-	else:
-		dic_erros['Erro_Sexo']="Nenhum"
-	if grupo:
-		dic_erros['Erro_Grupo']=grupo
-	else:
-		dic_erros['Erro_Grupo']="Nenhum"
-	if idade:
-		dic_erros['Erro_Idade']=idade
-	else:
-		dic_erros['Erro_Idade']="Nenhum"
-#	if chave:
-#		dic_erros['Erro_Chave']=chave
-#	else:
-#		dic_erros['Erro_Chave']="Nenhum"
-
-	return dic_erros
-
-
-##########################################################################tentativas anteriores:
-'''
-
-def ConfereChavesEstrutura(Estrutura_item): # teste de formatação das chaves do dicionario estrutura basico
-		chaves=[u'adjetivo', u'Nome', 'MediaGeral', 'Amostra', u'Narrativa', u'pronome', u'verbo', u'substantivo', u'Numero', u'Sexo', u'Idade', u'preposi\xe7\xe3o', u'Grupo', u'conjun\xe7\xe3o']
-		chaves.sort()
-		E=Estrutura_item.keys()
-		E.sort()
-		if E == chaves:
-			return True
-		else:
-			return False
-'''
 

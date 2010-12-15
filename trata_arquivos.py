@@ -53,6 +53,9 @@ def tag(arq): #recebe arquivo, extrai a sopa XML tag deste e retorna dicionario
 	d={}
 	erro=(False, '')
 	chaves=['Amostra', u'Grupo', u'Idade', 'MediaGeral', 'MediaGeralTotal', u'Narrativa', u'Nome', u'Numero', u'Sexo','id3v2','TRACKNUMBER','YEAR','GENRE',u'G\xeanero']
+	
+
+
 
 	n=0
 	for i in S:
@@ -91,6 +94,7 @@ def tag(arq): #recebe arquivo, extrai a sopa XML tag deste e retorna dicionario
 	if d.has_key(u'grupo'):
 		d['Grupo']=d.pop(u'grupo')
 
+
 ########
 	if erro[0]:
 		raise KeyError (erro[1])
@@ -103,7 +107,7 @@ def pclasses(arq): #recebe arquivo aup e retorna lista ordenada das classes da p
 
 	sopa=label(arq)
 	tam=0
-	classes=[u'substantivo', u'adjetivo', u'verbo', u'conjunção', u'preposição', u'pronome']
+	classes=[u'substantivo', u'adjetivo', u'verbo', u'conjunção', u'preposição', u'pronome',u'artigo', u'ruptura',u'interjeição',u'advérbio',u'indeterminado']
 	l=[] #lista buffer
 
 	for t in sopa.findAll("label"):
@@ -113,12 +117,12 @@ def pclasses(arq): #recebe arquivo aup e retorna lista ordenada das classes da p
 
 	l=[x.lower() for x in l] #converte todas as classes para minusculas
 # IMPLEMENTAR APOS OUVER UMA REVISAO MAIS CRITERIOSA NA ENTRADA - OU DETECTAR PROBLEMA DE ENTRDAS SEM CLASSE
-#	erros=list(set(l).difference(set(classes)))
-	
-#	if erros:
-#		raise KeyError (str(l))
-#	else:
-	return l
+	erros=list(set(l).difference(set(classes)))
+
+	if erros:
+		raise KeyError (str(erros))
+	else:
+		return l
 	
 
 def palavras(arq): #recebe arquivo aup e retorna lista ordenada das palavras
@@ -184,8 +188,7 @@ def media(arq): #media dos intervalos
 
 
 def listadeclasses():
-	return [u'substantivo', u'adjetivo', u'verbo', u'conjunção', u'preposição', u'pronome']
-
+	return [u'substantivo', u'adjetivo', u'verbo', u'conjunção', u'preposição', u'pronome',u'artigo', u'ruptura',u'interjeição',u'advérbio',u'indeterminado']
 def listadeamostras():
 	return ["M1A1","M1A2","M1A3","M2A1","M2A2","M2A3","C1A1","C1A2","C1A3","C2A1","C2A2","C2A3","I1A1","I1A2","I1A3"]
 def listadenarrativas():
@@ -221,7 +224,7 @@ def mediadaclasse(arq,pclasse): #recebe arquivo e classe buscada e retorna tupla
 
 ####################### contrução da estrutura inicial:
 def estrutura (arq):
-	classes=[u'substantivo', u'adjetivo', u'verbo', u'conjunção', u'preposição', u'pronome']
+	classes=[u'substantivo', u'adjetivo', u'verbo', u'conjunção', u'preposição', u'pronome',u'artigo', u'ruptura',u'interjeição',u'advérbio',u'indeterminado']
 	E=tag(arq)
 	E['MediaGeral']=media(arq)
 	for i in classes:

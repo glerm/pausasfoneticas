@@ -4,6 +4,7 @@ import tkMessageBox
 from filtra_estrutura import *
 from configs import * #importa paths
 from data import Estrutura
+import time
 
 root = Tk()
 root.title("Pausas Silentes - Renderização")
@@ -18,7 +19,7 @@ def Teste_de_Erros():
 		if erros_entrada:
 			status=status+"\n++++ Amostras e Nomes:\n"
 			for erros in erros_entrada['Erro_Amostras']:
-				status=status+ erros[0] + str(erros[1]) + "\n"
+				status=status+ str(erros) #str(erros[0]) + str(erros[1]) + "\n"
 			status=status+"\n++++ Sexo:\n"
 			status=status+str(erros_entrada['Erro_Sexo'])+"\n"
 			status=status+"\n++++ Grupo:\n"
@@ -59,14 +60,18 @@ def muda():
 		for i in todos[1]:
 				t.insert(END, "\n\nRenderizando arquivo: "+ str(i))
 				t.tk.call('update')
+				#render_estrutura=estrutura(i) #usar para ver os erros - como comolocar no Tkinter.Text?
 				try:
-					renderizado.append(estrutura(i))
+					render_estrutura=estrutura(i)
+					renderizado.append(render_estrutura)
 					t.insert(END,"\n+++++++ OK!")
 					t.tk.call('update')
 					t.see(END)
 				except:
 					t.insert(END,"\n+++++++ ERRO NAS CHAVES OU CLASSES DE PALAVRAS DO ARQUIVO ACIMA!\n As chaves e classes permitidas são:")
-					t.insert(END,u'\nAmostra, Grupo, Idade, Narrativa, Nome, Numero, Sexo,\nadjetivo, conjun\xe7\xe3o, preposi\xe7\xe3o, pronome, substantivo, verbo')
+					t.insert(END,u'\nAmostra, Grupo, Idade, Narrativa, Nome, Numero, Sexo,')
+					t.insert(END,u'substantivo, adjetivo, verbo, conjunção, preposição, pronome, artigo, ruptura, interjeição, advérbio, indeterminado')
+					t.insert(END,u'\n\nErros comuns são - falta de acentos, espaços ou o uso de palavras não reservadas ou trocas de letras nestas.\nREVISE ESTE ARQUIVO E RODE NOVAMENTE A RENDERIZAÇÃO!')
 					t.tk.call('update')
 					t.see(END)
 					break

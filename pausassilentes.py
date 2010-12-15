@@ -622,7 +622,7 @@ Tscroll = Scrollbar(root)
 
 
 
-text = Text(root,wrap=WORD,yscrollcommand=Tscroll.set, foreground="orange",background="black", width="100",height="18",bd=5,font=("Arial",12))
+text = Text(root,wrap=WORD,yscrollcommand=Tscroll.set, foreground="black",background="white", width="100",height="18",bd=5,font=("Arial",12))
 #text.insert(INSERT, atual)
 #text.delete(0.0,END) #limpa
 
