@@ -11,13 +11,22 @@ import locale
 import os
 language, output_encoding = locale.getdefaultlocale()
 
-#importa a estrutura filtrada original
+#importa a estrutura filtrada original e as funções de filtro
 from filtra_estrutura import *
 from configs import * #importa paths
 
 
 
-homedir = os.path.expanduser('~') 
+######## funcoes globais DE AVISO TKINTER
+
+def donothing():
+	tkMessageBox.showinfo("Pronto!", "Os relatorios ja foram gerados e estao no diretorio " )
+
+def janeladeaviso(texto):
+	tkMessageBox.showinfo("Pronto!",texto)
+
+
+########################### MONTA JANELA PRINCIPAL
 
 root = Tk()
 root.title("Tipos de Relatório")
@@ -26,15 +35,7 @@ w, h = root.winfo_screenwidth(), root.winfo_screenheight()
 root.geometry("%dx%d+0+0" % (w, h))
 
 
-######## funcoes globais
-
-def donothing():
-	tkMessageBox.showinfo("Pronto!", "Os relatorios ja foram gerados e estao no diretorio " )
-
-def janeladeaviso(texto):
-	tkMessageBox.showinfo("Pronto!",texto)
-
-######################### listas teste
+######################### listas das celulas
 
 sujeitos=[]
 
@@ -44,9 +45,8 @@ for i in EstruturaF.keys():
 grupos=["Pesquisa","Controle"]
 idade=["7 anos","8 anos","9 anos","10 anos"] 
 historia=[u'Mecânica1',u'Mecânica2',"Comportamental1","Comportamental2","Intencional"]
-gramatica=[u'substantivo', u'adjetivo', u'verbo', u'conjunção', u'preposição', u'pronome',u'artigo', u'ruptura',u'interjeição',u'advérbio',u'indeterminado']
+gramatica=[u'substantivo', u'adjetivo', u'verbo', u'conjunção', u'preposição', u'pronome',u'artigo', u'ruptura',u'interjeição',u'advérbio',u'indeterminado',u'numeral']
 sexo=["Masculino","Feminino"]
-##############################
 
 ########### cores das celulas
 cor1="#BFACC5"
@@ -55,13 +55,13 @@ cor3="#FBBEA2"
 cor4="#BFAAA2"
 cor5="#85ADA2"
 cor6="#FBEC5D"
-########################################
+###################################################################################################
 
 
 
 
 
-######### funcao que define a celula de itens com botoes de seleciona tudo/nada e todos itens dentro
+######### CLASSE que define a celula de itens com botoes de seleciona tudo/nada e todos itens dentro
 
 
 class Celula:
@@ -121,10 +121,6 @@ class Celula:
 			self.CELULA=CELitens
 			#print self.CELULA
 
-		#######################################################
-
-
-
 		lbox.bind("<ButtonRelease-1>", ler ) #le o botao do mouse quando solta
 
 		lbox.config(bg=cor, font=("Helvetica",12) ) #configs da lista
@@ -148,10 +144,10 @@ class Celula:
 	def CELULAlimpa(self):
 		self.CELULA=[]
 		return self.CELULA
-	
+################################################################### FIM DA CLASSE CÉLULA
 
 
-#EscolheDIR()
+#MONTA O FRAME DAS CELULAS DE ESCOLHA##################################
 
 a=Celula(root,0,sujeitos,cor1)
 b=Celula (root,1,grupos,cor2)
@@ -161,13 +157,13 @@ e=Celula (root,4,gramatica,cor5)
 f=Celula (root,5,sexo,cor6)
 
 atual=[a.CELULAtual(),b.CELULAtual(),c.CELULAtual(),d.CELULAtual(),e.CELULAtual(),f.CELULAtual()]
+#############################################
 
 
 
 
 
-
-
+############## chama a função que atualizará todas médias
 mediaN=MediasTodasNarrativas()
 
 ###### funções para converter tags para nome expandido - exemplo: de P para Pesquisa de F para Feminino
@@ -459,7 +455,7 @@ def CSVfiltraHistoria():
 	csv=csv.encode('utf-8')
 	msg="Gravado arquivo PAUSASHistoria.csv"
 	text.insert(INSERT, msg)
-	dados=open(CSVpath+'PAUSASHistoria.csv','w')
+	dados=open(CSVpath+'PAUSASporHistoria.csv','w')
 	dados.write(csv)
 	dados.close()
 	janeladeaviso(msg)
@@ -478,7 +474,7 @@ def CSVfiltraGramatica():
 	csv=csv.encode('utf-8')
 	msg="Gravado arquivo PAUSASGramatica.csv"
 	text.insert(INSERT, msg)
-	dados=open(CSVpath+'PAUSASGramatica.csv','w')
+	dados=open(CSVpath+'PAUSASporGramatica.csv','w')
 	dados.write(csv)
 	dados.close()
 	janeladeaviso(msg)
@@ -512,69 +508,9 @@ def CSVfiltraSexo():
 	f.CELULAlimpa()
 
 
-
-
 def limpa():
 	global text
 	text.delete(0.0,END)
-
-
-def rendershell():
-	c = Toplevel(root)
-	c.title("Renderização")
-	c.geometry('500x400+230+130')
-	t = Text(c,foreground="orange",background="black")
-	t.pack()
-	c.tk.call('update')
-	renderizado=[]
-	todos=abretudo()
-	if not todos[0]: #quando existem arquivos faltantes ou repetidos.aup
-		t.insert(END,"\nERRO!!\nExistem arquivos faltantes ou repetidos nas pastas: \n")
-		t.tk.call('update')
-		for folder_nome in todos[1]:
-			t.insert(END,folder_nome +"\n")
-			t.tk.call('update')
-		t.see(END)
-		c.tk.call('update')
-		c.focus_set()
-	else:
-			
-		for i in todos[1]:
-				t.insert(END, "\n\nRenderizando arquivo: "+ str(i))
-				t.tk.call('update')
-				renderizado.append(estrutura(i))
-				t.insert(END,"\n+++++++ OK!")
-				t.tk.call('update')
-				t.see(END)
-		EF_new=EstruturaFiltrada(renderizado)
-		erros_entrada=ChecarErrosAmostras(EF_new)
-		t.insert(END, "\nrenderizado: " + str(erros_entrada))
-		t.tk.call('update')
-		t.see(END)
-				
-		if (False in erros_entrada.itervalues()):
-			t.insert(END, "\n**********ERRO!!!!!!*********\nErros na entrada de dados - Repetição da Chave Narrativa nas amostras:\n")
-			t.tk.call('update')
-			for val in erros_entrada.items():
-				if not val[1]: #se o valor not(False) isto é - havia inconsistencia
-					t.insert(END, "++++ "+ str(val[0]) + " +++++\n")
-					t.tk.call('update')
-			t.insert(END, "\n\nCheque se há entradas repetidas ou erradas no campo Narrativa de suas fichas.\n")
-			t.tk.call('update')
-			t.see(END)
-		else:
-			####ok! grava
-			x='Estrutura='+str(renderizado)
-			dados=open(PYPATH+'data.py','w')
-			dados.write(x)
-			t.insert(END, "\n\n**** Gravado arquivo da nova renderização ***** ")
-			t.tk.call('update')
-			t.see(END)
-	c.tk.call('update')
-	c.focus_set()
-
-
-
 
 
 
@@ -602,16 +538,9 @@ SALVAR.add_command(label="Relatório por Sexo", command=CSVfiltraSexo)
 SALVAR.add_command(label="Limpa", command=limpa)
 menubar.add_cascade(label="Salvar", menu=SALVAR)
 
-RENDER = Menu(menubar, font=("Arial",20),activebackground="red", tearoff=0)
-RENDER.add_command(label="Nova Renderização", command=rendershell)
-menubar.add_cascade(label="R​enderiza", menu=RENDER)
-
-
-
-
 root.config(menu=menubar)
 
-################################
+################################ CLIPBOARD
 #Tframe=Tkinter.Frame(root,height="100")
 #Tframe.grid(row=3,column=0,columnspan=6,sticky=W)
 
@@ -628,6 +557,8 @@ text = Text(root,wrap=WORD,yscrollcommand=Tscroll.set, foreground="black",backgr
 
 Tscroll.config(command=text.yview) #ativa o scroll dentro do texto
 text.grid(row=3,column=1,columnspan=6,sticky=N+W,)
+
+####################### LOOP Tkinter ROOT
 
 root.mainloop()
 

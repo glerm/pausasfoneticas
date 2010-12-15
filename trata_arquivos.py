@@ -12,16 +12,16 @@ import numpy
 
 
 
-
-def calendario(): #dia da execucao do codigo, formatado
+#dia da execucao do codigo, formatado
+def calendario(): 
 	import time
 	import datetime
 	from time import gmtime, strftime
 	c=strftime("%A, %d %b %Y %H:%M:%S")
 	return c
 
-
-def label(arq): #extrai a sopa XML label do aup e retorna no formato do Beautiful Soup 
+#extrai a sopa XML label do aup e retorna no formato do Beautiful Soup 
+def label(arq): 
 	
 	data=[]
 	aup = open(arq,"r")
@@ -107,7 +107,7 @@ def pclasses(arq): #recebe arquivo aup e retorna lista ordenada das classes da p
 
 	sopa=label(arq)
 	tam=0
-	classes=[u'substantivo', u'adjetivo', u'verbo', u'conjunção', u'preposição', u'pronome',u'artigo', u'ruptura',u'interjeição',u'advérbio',u'indeterminado']
+	classes=[u'substantivo', u'adjetivo', u'verbo', u'conjunção', u'preposição', u'pronome',u'artigo', u'ruptura',u'interjeição',u'advérbio',u'indeterminado',u'numeral']
 	l=[] #lista buffer
 
 	for t in sopa.findAll("label"):
@@ -188,7 +188,7 @@ def media(arq): #media dos intervalos
 
 
 def listadeclasses():
-	return [u'substantivo', u'adjetivo', u'verbo', u'conjunção', u'preposição', u'pronome',u'artigo', u'ruptura',u'interjeição',u'advérbio',u'indeterminado']
+	return [u'substantivo', u'adjetivo', u'verbo', u'conjunção', u'preposição', u'pronome',u'artigo', u'ruptura',u'interjeição',u'advérbio',u'indeterminado',u'numeral']
 def listadeamostras():
 	return ["M1A1","M1A2","M1A3","M2A1","M2A2","M2A3","C1A1","C1A2","C1A3","C2A1","C2A2","C2A3","I1A1","I1A2","I1A3"]
 def listadenarrativas():
@@ -224,7 +224,7 @@ def mediadaclasse(arq,pclasse): #recebe arquivo e classe buscada e retorna tupla
 
 ####################### contrução da estrutura inicial:
 def estrutura (arq):
-	classes=[u'substantivo', u'adjetivo', u'verbo', u'conjunção', u'preposição', u'pronome',u'artigo', u'ruptura',u'interjeição',u'advérbio',u'indeterminado']
+	classes=[u'substantivo', u'adjetivo', u'verbo', u'conjunção', u'preposição', u'pronome',u'artigo', u'ruptura',u'interjeição',u'advérbio',u'indeterminado',u'numeral']
 	E=tag(arq)
 	E['MediaGeral']=media(arq)
 	for i in classes:

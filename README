@@ -1,1 +1,58 @@
-branch para testes de instalação mínima
+PAUSAS SILENTES v.0.1   licença GPLv3 Guilherme Soares
+-----------------------------------------------------------
+Programa que manipula dados de analise pausas silentes em falas de crianças em aprendizado verbal. Os arquivos são gerados em Audacity >= v1.3, utilizando os recursos de Metadados e Faixas de Títulos disponíveis nesta versão.
+Este software analisa o xml gerado pelo Audacity e calcula médias gerais e específicas de cada amostra, separando também para comparações por sexo, idade, classe gramatical da palavra 
+
+ARQUIVOS UTILIZADOS:
+------------------------------------------------------------
+
+[ congigs.py ] - paths
+
+[ trata arquivos.py ] - faz todas funções de recursividade dentro dos arquivos e monta a estrutura básica. contem os testes que são feito em tempo de filtragem do arquivo aup.
+
+[ filtra estrutura.py ]- filtra a estrutura gravada para uma estrutura ja organizada com as médias e separada por individuo - contem tambem os testes de consistencia da amostra que são feitos depois da amostra gravada.
+
+[renderiza.py] - interface gráfica de renderização dos arquivos .aup. A renderização deve conter apenas amostras válidas para gerar um data.py válido e inicar o uso da interface de calculos das médias.
+
+[data.py] - versão atualizada da renderização da pasta que contem os arquivos .aup
+
+[pausas.py] - interface gráfica de calculo das médias. contem também as funções de mostrar as médias no clipboard e conversão de arquivos para csv.
+
+*(arquivos .pyc são binarios gerados pelo interpretador para otimizar as chamadas )
+
+MELHORAS POSSÍVEIS NO SOFTWARE PAR NOVA VERSÃO:
+-------------------------------------
+* a barra lateral de scroll do clipboard não funciona mais - não entendi ainda a origem deste bug mas a seleção de texto ainda funciona corretamente.
+
+* descrever mais detalhadamente as funções na documentação... eliminar redundâncias e limpar o código.
+
+* imprimir mais precisamente os erros detectados em tempo de contrução das médias no [trata_arquivos.py]
+
+PROBLEMAS COMUNS NAS AMOSTRAS - CULTURA DE USO DA INTERFACE:
+-------------------------------------
+
+O software não funcionará corretamente enquanto as amostras não forem totalmente adaptadas ao padrão pré combinado.
+
+A maioria dos erros está detectada, existe porém um tipo de erro que não influencia da renderização, mas que prejudica o calculo das médias - Algumas amostras estão sem as classes de palavras ou utilizam classes gramaticais que não foram combinadas anteriormente de entrar no cálculo (ex: "numeral"(?)) - as classes implementadas conforme requisição foram - 'substantivo', 'adjetivo', 'verbo', 'conjunção', 'preposição', 'pronome','interjeição', 'advérbio', 'ruptura', 'numeral' e 'indeterminado'. Elas devem ter a entrada em minúsculas e com acentos, caso contrario não serão detectadas.
+
+Melhor maneira d eeditar no Audacity: digitar a palavra e logo apos usem o CONTROL+B para entrar com a classe logo acima desta. Não façam as duas coisas em separado pois assim tem mais chance de errar.
+
+A chave Sexo está aparecendo em várias amostras como Gênero. Utilizem "Sexo" sempre, por favor.
+
+Não mar arbitrariamente o nome das chaves. Elas são: Amostra, Grupo, Idade, Narrativa, Nome, Numero, Sexo. Sempre com a primeira em maiúscula.
+
+As chaves Grupo (P ou C) e Sexo (M ou F) devem ter a entrada em maiúsculas.
+
+A chave Idade utiliza o padrão 7a (com a em minuscula representando anos). Não há necessidade de colocar os meses de idade da criança a não ser por controle de vocês - a idade usa padrão em anos conforme combinado previamente.
+
+Não utilizar nomes de arquivos e pastas enormes e cheios de espaços. Dificulta a manutenção dos arquivos e pode gerar inconsistências. Aparentemente não influi no processamento, mas não há necessidade já que as tags contem todos os dados.
+
+Na nova versão do programa o software de renderização e detecção de erros está agora separado do software de cálculo de médias, e este último só poderá ser utilizado com todas as amostras corrigidas caso contrário obviamente não funciona corretamente.  Para fazer testes portanto retire amostras defeituosas da renderização e renderize apenas com as amostras consistentes.
+
+Como já está óbvio este trabalho passou muito do que inicialmente era pedido - na verdade além de oferecer o software tivemos que prestar uma consultoria constante que teve que ir se moldando ao entendimento que as pesquisadoras foram tendo do problema, na medida que utilizavam a interface.
+
+--------------------------------------
+
+
+
+
