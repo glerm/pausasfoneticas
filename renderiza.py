@@ -95,14 +95,14 @@ scrollbar.pack(side=LEFT, fill=Y)
 
 
 
-text = Text(root,wrap=WORD,width="100",height="30",bd=5,font=("Arial",13), foreground="orange",background="black")
+text = Text(root,wrap=WORD,width="120",height="30",bd=5,font=("Arial",13), foreground="orange",background="black")
 text.insert(INSERT, status)
 text.see(END)
 text.config(yscrollcommand=scrollbar.set)
 text.pack()
 
 
-b = Button(toolbar, text="Renderização", command=muda)
+b = Button(toolbar, text="Renderizar!",width="100",height="10",font=("Helvetica", 20), fg="black",bg="#786D70", command=muda)
 b.pack(side=LEFT, padx=2, pady=2)
 
 scrollbar.config(command=text.yview)
