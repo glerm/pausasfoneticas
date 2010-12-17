@@ -6,11 +6,6 @@ from configs import * #importa paths
 from data import Estrutura
 import time
 
-root = Tk()
-root.title("Pausas Silentes - Renderização")
-# create a toolbar
-toolbar = Frame(root)
-
 def Teste_de_Erros():
 	status='Confira as tags das amostras.\nForam encontrados erros em:\n---------------\n'
 	if Estrutura:
@@ -35,12 +30,6 @@ def Teste_de_Erros():
 	else:
 		status=u'Ainda não foi rodada nenhuma renderização ou esta foi deletada. Rode uma nova renderização'
 	return status
-
-
-
-status=Teste_de_Erros()
-
-
 
 
 def muda():
@@ -88,24 +77,28 @@ def muda():
 			
 			
 
+
+
+root = Tk()
+root.title("Pausas Silentes - Renderização")
+# create a toolbar
+#toolbar = Frame(root)
+
+
 scrollbar = Scrollbar(root)
 scrollbar.pack(side=LEFT, fill=Y)
 
 
-
-
-
 text = Text(root,wrap=WORD,width="120",height="30",bd=5,font=("Arial",13), foreground="orange",background="black")
+status=Teste_de_Erros()
 text.insert(INSERT, status)
 text.see(END)
 text.config(yscrollcommand=scrollbar.set)
 text.pack()
 
 
-b = Button(toolbar, text="Renderizar!",width="100",height="10",font=("Helvetica", 20), fg="black",bg="#786D70", command=muda)
+b = Button(root, text="Renderizar!",width="100",height="10",font=("Helvetica", 20), fg="black",bg="#786D70", command=muda)
 b.pack(side=LEFT, padx=2, pady=2)
 
-scrollbar.config(command=text.yview)
-toolbar.pack(side=TOP, fill=X)
 
 mainloop()
