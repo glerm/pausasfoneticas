@@ -1,0 +1,74 @@
+#!/bin/bash  
+
+###
+##---------------->[ script de instalação do software Pausas Silentes v.1.0 ]-----
+#
+
+
+#export LANG=pt_BR
+
+icone="pausaswav_RENDER.png"
+
+#intro
+zenity --info --width=400  --window-icon=$icone --title="Instalação Software Pausas Silentes v.1.0" --text="Este é o programa de instalação do software \nPausas Silentes v1.0.\nNa próxima janela selecione a pasta de trabalho de suas amostras."
+
+#possui as amostras?
+zenity --question --title="Importante!" --text="Você já possui uma pasta de trabalho das amostras?"
+abortar=$?
+
+#condição que avisa sobre a necessidade de criar a pasta de amostras e sai do programa
+if [ "$abortar" = "1" ]; then
+zenity --warning --width=400  --window-icon=$icone --title="Instalação Software Pausas Silentes v.1.0" --text="Você precisa criar a pasta de amostras antes de rodar este instalador .\n\nColoque dentro desta pasta apenas as pastas com cada seleção de arquivos .aup dos alunos, preparados no Audacity com os labels.\nNomeie cada pasta com o nome de cada aluno."
+exit
+
+#condição que define a variável com a pasta das amostras
+elif [ "$abortar" = "0" ]; then
+zenity --warning --width=400  --window-icon=$icone --title="Instalação Software Pausas Silentes v.1.0" --text="Você ira selecionar apenas *a pasta que contém dentro dela todas as pastas dos alunos*"
+AMOSTRA=$(zenity --width=400  --file-selection --directory --title="Selecione o diretorio das amostras")
+fi
+
+#se não há o diretório de trabalho cria-o
+WORK_DIR="$HOME/pausasv0.1"
+mkdir -p $WORK_DIR
+
+#sobrescreve a variavel com o path da amostra
+AMOSTRA_PATH="$WORK_DIR/amostra_dir.py"
+touch $AMOSTRA_PATH
+echo "amostras_path=\"$AMOSTRA/\"" > $AMOSTRA_PATH
+
+#copia, espande e apaga o pacote
+mv pausasv0.1.tar.gz $WORK_DIR
+cd $WORK_DIR
+
+tar -xvzf pausasv0.1.tar.gz
+rm -rf pausasv0.1.tar.gz
+
+## formatando os icones
+touch r.desktop
+touch v.desktop
+
+#formatando r.desktop icone
+echo "#!/usr/bin/env xdg-open" >> r.desktop
+echo "[Desktop Entry]" >> r.desktop
+echo "Type=Application" >> r.desktop
+echo "Encoding=UTF-8" >> r.desktop
+echo "Name=Renderizador Pausas Fonéticas" >> r.desktop
+echo "Exec=/usr/bin/python \"$WORK_DIR/renderiza.py\"" >> r.desktop
+echo "Icon=$WORK_DIR/pausaswav_RENDER.png" >> r.desktop
+echo "Categories=Development;Application;" >> r.desktop
+
+#formatando v.desktop icone
+echo "#!/usr/bin/env xdg-open" >> v.desktop
+echo "[Desktop Entry]" >> v.desktop
+echo "Type=Application" >> v.desktop
+echo "Encoding=UTF-8" >> v.desktop
+echo "Name=Visualizador Pausas Fonéticas" >> v.desktop
+echo "Exec=/usr/bin/python \"$WORK_DIR/pausas.py\"" >> v.desktop
+echo "Icon=$WORK_DIR/pausaswav_MEDIAS.png" >> v.desktop
+echo "Categories=Development;Application;" >> v.desktop
+# linka os icones na pasta ~/.local/share/applications
+ln -s $WORK_DIR/r.desktop $HOME/.local/share/applications/r.desktop
+ln -s $WORK_DIR/v.desktop $HOME/.local/share/applications/v.desktop
+
+
+
