@@ -83,13 +83,10 @@ cp $WORK_DIR/v.desktop $HOME/.local/share/applications/v.desktop
 PASSWORD=`zenity --title='Password' --text='Preciso de sua senha para finalizar a instalação.' --entry`
 echo $PASSWORD | sudo -S aptitude install python-beautifulsoup | zenity --text-info
 
-echo $PASSWORD | sudo -S mkdir -p /usr/share/applications/ | zenity --text-info
-echo $PASSWORD | sudo -S cp $WORK_DIR/r.desktop /usr/share/applications/r.desktop | zenity --text-info
-echo $PASSWORD | sudo -S cp $WORK_DIR/r.desktop /usr/share/applications/r.desktop | zenity --text-info
+echo $PASSWORD | sudo -S mkdir -p /usr/share/applications/ 
+echo $PASSWORD | sudo -S cp $WORK_DIR/r.desktop /usr/share/applications/r.desktop 
+echo $PASSWORD | sudo -S cp $WORK_DIR/v.desktop /usr/share/applications/r.desktop 
 
-#mkdir -p /usr/share/applications/
-#cp $WORK_DIR/r.desktop /usr/share/applications/r.desktop
-#cp $WORK_DIR/v.desktop /usr/share/applications/v.desktop
 
 
 
