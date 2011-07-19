@@ -9,6 +9,8 @@
 
 icone="pausaswav_RENDER.png"
 
+
+
 #intro
 zenity --info --width=400  --window-icon=$icone --title="Instalação Software Pausas Silentes v.1.0" --text="Este é o programa de instalação do software \nPausas Silentes v1.0.\nNa próxima janela selecione a pasta de trabalho de suas amostras."
 
@@ -66,9 +68,26 @@ echo "Name=Visualizador Pausas Fonéticas" >> v.desktop
 echo "Exec=/usr/bin/python \"$WORK_DIR/pausas.py\"" >> v.desktop
 echo "Icon=$WORK_DIR/pausaswav_MEDIAS.png" >> v.desktop
 echo "Categories=Development;Application;" >> v.desktop
-# linka os icones na pasta ~/.local/share/applications
+
+
+
+# linka os icones na pasta ~/.local/share/applications e na /usr/share/applications/
+mkdir -p $HOME/.local/share/applications/
+
 ln -s $WORK_DIR/r.desktop $HOME/.local/share/applications/r.desktop
 ln -s $WORK_DIR/v.desktop $HOME/.local/share/applications/v.desktop
+
+gksudo --message "Preciso de sua senha para finalizar a instalação." su
+
+aptitude install python-beautifulsoup
+
+mkdir -p /usr/share/applications/
+ln -s $WORK_DIR/r.desktop /usr/share/applications/r.desktop
+ln -s $WORK_DIR/v.desktop /usr/share/applications/v.desktop
+
+
+
+
 
 
 
