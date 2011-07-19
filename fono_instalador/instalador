@@ -33,10 +33,7 @@ fi
 WORK_DIR="$HOME/pausasv0.1"
 mkdir -p $WORK_DIR
 
-#sobrescreve a variavel com o path da amostra
-AMOSTRA_PATH="$WORK_DIR/amostra_dir.py"
-touch $AMOSTRA_PATH
-echo "amostras_path=\"$AMOSTRA/\"" > $AMOSTRA_PATH
+
 
 #copia, espande e apaga o pacote
 mv pausasv0.1.tar.gz $WORK_DIR
@@ -44,6 +41,11 @@ cd $WORK_DIR
 
 tar -xvzf pausasv0.1.tar.gz
 rm -rf pausasv0.1.tar.gz
+
+#sobrescreve a variavel com o path da amostra
+AMOSTRA_PATH="$WORK_DIR/amostra_dir.py"
+touch $AMOSTRA_PATH
+echo "amostras_path=\"$AMOSTRA/\"" > $AMOSTRA_PATH
 
 ## formatando os icones
 touch r.desktop
@@ -74,16 +76,20 @@ echo "Categories=Development;Application;" >> v.desktop
 # linka os icones na pasta ~/.local/share/applications e na /usr/share/applications/
 mkdir -p $HOME/.local/share/applications/
 
-ln -s $WORK_DIR/r.desktop $HOME/.local/share/applications/r.desktop
-ln -s $WORK_DIR/v.desktop $HOME/.local/share/applications/v.desktop
+cp $WORK_DIR/r.desktop $HOME/.local/share/applications/r.desktop
+cp $WORK_DIR/v.desktop $HOME/.local/share/applications/v.desktop
 
-gksudo --message "Preciso de sua senha para finalizar a instalação." su
 
-aptitude install python-beautifulsoup
+PASSWORD=`zenity --title='Password' --text='Preciso de sua senha para finalizar a instalação.' --entry`
+echo $PASSWORD | sudo -S aptitude install python-beautifulsoup | zenity --text-info
 
-mkdir -p /usr/share/applications/
-ln -s $WORK_DIR/r.desktop /usr/share/applications/r.desktop
-ln -s $WORK_DIR/v.desktop /usr/share/applications/v.desktop
+echo $PASSWORD | sudo -S mkdir -p /usr/share/applications/ | zenity --text-info
+echo $PASSWORD | sudo -S cp $WORK_DIR/r.desktop /usr/share/applications/r.desktop | zenity --text-info
+echo $PASSWORD | sudo -S cp $WORK_DIR/r.desktop /usr/share/applications/r.desktop | zenity --text-info
+
+#mkdir -p /usr/share/applications/
+#cp $WORK_DIR/r.desktop /usr/share/applications/r.desktop
+#cp $WORK_DIR/v.desktop /usr/share/applications/v.desktop
 
 
 
